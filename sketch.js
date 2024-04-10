@@ -1,12 +1,16 @@
-// set game board dimensions
-let grid_dimension = 10;
+// set game board dimensions && gameplay screen
+let grid_dimension = 7;
+let gameFlag = 1;
+
+// initializing aesthetic asset variables
+let backgroundImage;
 
 // arrays for class objects
 let battlegrid_array = [];
 let battleships_array = [];
 
 // array containing block sizes of all battleships
-let ship_sizes = [2,3,3,4];
+let ship_sizes = [2,3,4];
 let shipNumber = 0;
 let rotateFlag = 0;
 
@@ -21,11 +25,12 @@ class Battlegrid
     this.grid_separation = this.grid_size+5;
     this.grid_id_row = _grid_id_row;
     this.grid_id_col = _grid_id_col;
-    this.grid_fillColor = color(255);
-    this.grid_strokeColor = color(0,0,50);
+    this.grid_fillColor = color(0,0,25,50);
+    this.grid_strokeColor = color(150);
 
     this.grid_hoverFlag = 0;
     this.grid_occupiedFlag = 0;
+    this.grid_placedFlag = 0;
   }
   // function to draw squares of the matrix
   drawGrid()
@@ -49,7 +54,7 @@ class Battlegrid
         // looping for every ship size in ship_sizes array
         for(let i=0; i<=_ship_blockSize; i++)
         {
-          battlegrid_array[this.grid_id_row][this.grid_id_col+i].grid_fillColor = color(0,255,0);
+          battlegrid_array[this.grid_id_row][this.grid_id_col+i].grid_fillColor = color(0,255,0,50);
           battlegrid_array[this.grid_id_row][this.grid_id_col+i].grid_hoverFlag = 1;
 
           //push grid IDs onto Battleship class for grids having hoverFlag = 1
@@ -65,7 +70,7 @@ class Battlegrid
       {
         for(let i=0; i<=_ship_blockSize; i++)
         {
-          battlegrid_array[this.grid_id_row+i][this.grid_id_col].grid_fillColor = color(0,255,0);
+          battlegrid_array[this.grid_id_row+i][this.grid_id_col].grid_fillColor = color(0,255,0,50);
           battlegrid_array[this.grid_id_row+i][this.grid_id_col].grid_hoverFlag = 1;
 
           //push grid IDs onto Battleship class for grids having hoverFlag = 1
@@ -81,7 +86,7 @@ class Battlegrid
       {
         for(let i=0; i<=_ship_blockSize; i++)
         {
-          battlegrid_array[this.grid_id_row][this.grid_id_col-i].grid_fillColor = color(0,255,0);
+          battlegrid_array[this.grid_id_row][this.grid_id_col-i].grid_fillColor = color(0,255,0,50);
           battlegrid_array[this.grid_id_row][this.grid_id_col-i].grid_hoverFlag = 1;
 
           //push grid IDs onto Battleship class for grids having hoverFlag = 1
@@ -97,7 +102,7 @@ class Battlegrid
       {
         for(let i=0; i<=_ship_blockSize; i++)
         {
-          battlegrid_array[this.grid_id_row-i][this.grid_id_col].grid_fillColor = color(0,255,0);
+          battlegrid_array[this.grid_id_row-i][this.grid_id_col].grid_fillColor = color(0,255,0,50);
           battlegrid_array[this.grid_id_row-i][this.grid_id_col].grid_hoverFlag = 1;
 
           //push grid IDs onto Battleship class for grids having hoverFlag = 1
@@ -115,22 +120,22 @@ class Battlegrid
           //checking whether if the whole ship can fit onto the game board or not w.r.t. ship orientation
           if(rotateFlag == 0 && (this.grid_id_col+i < grid_dimension))
           {
-            battlegrid_array[this.grid_id_row][this.grid_id_col+i].grid_fillColor = color(255,0,0);
+            battlegrid_array[this.grid_id_row][this.grid_id_col+i].grid_fillColor = color(255,0,0,50);
             battlegrid_array[this.grid_id_row][this.grid_id_col+i].grid_hoverFlag = 0;
           }
           else if(rotateFlag == 90 && (this.grid_id_row+i < grid_dimension))
           {
-            battlegrid_array[this.grid_id_row+i][this.grid_id_col].grid_fillColor = color(255,0,0);
+            battlegrid_array[this.grid_id_row+i][this.grid_id_col].grid_fillColor = color(255,0,0,50);
             battlegrid_array[this.grid_id_row+i][this.grid_id_col].grid_hoverFlag = 0;
           }
           else if(rotateFlag == 180 && (this.grid_id_col-i >= 0))
           {
-            battlegrid_array[this.grid_id_row][this.grid_id_col-i].grid_fillColor = color(255,0,0);
+            battlegrid_array[this.grid_id_row][this.grid_id_col-i].grid_fillColor = color(255,0,0,50);
             battlegrid_array[this.grid_id_row][this.grid_id_col-i].grid_hoverFlag = 0;
           }
           else if(rotateFlag == 270 && (this.grid_id_row-i >= 0))
           {
-            battlegrid_array[this.grid_id_row-i][this.grid_id_col].grid_fillColor = color(255,0,0);
+            battlegrid_array[this.grid_id_row-i][this.grid_id_col].grid_fillColor = color(255,0,0,50);
             battlegrid_array[this.grid_id_row-i][this.grid_id_col].grid_hoverFlag = 0;
           }
         }
@@ -138,10 +143,19 @@ class Battlegrid
     }
     else
     {
-      //resetting hoverFlag & fill once mouse moves away
-      this.grid_fillColor = color(255);
+      //resetting hoverFlag & fill once mouse moves away, and if any ship is not placed in the grid
+      if(this.grid_placedFlag != 1)
+      {
+        this.grid_fillColor = color(0,0,25,50);
+      }
+
       this.grid_hoverFlag = 0;
     }
+  }
+  gridOccupied()
+  {
+    this.grid_fillColor = color(0,255,0,50);
+    this.grid_placedFlag = 1;
   }
 }
 
@@ -155,16 +169,21 @@ class Battleships
   }
 }
 
+function preload()
+{
+  backgroundImage = loadImage("./Waves.jpg");
+}
+
 function setup()
 {
   createCanvas(windowWidth, windowHeight);
-  background(255);
+  background(backgroundImage);
 
   // instantiating matrix (game board)
-  let init_gridPosY = int(height/9);
+  let init_gridPosY = int(height/4.5);
   for(let i=0; i<grid_dimension; i++)
   {
-    let init_gridPosX = int(width/12);
+    let init_gridPosX = int(width/9);
     battlegrid_array.push([]);
 
     for(let j=0; j<grid_dimension; j++)
@@ -187,42 +206,53 @@ function setup()
 
 function draw()
 {
-  // drawing the matrix (game board)
-  for(let gridRow=0; gridRow<grid_dimension; gridRow++)
+  // --- PLAYER 1 SETUP SCREEN --- //
+
+  if(gameFlag == 1)
   {
-    for(let gridColumn=0; gridColumn<grid_dimension; gridColumn++)
+    // drawing the matrix (game board)
+    for(let gridRow=0; gridRow<grid_dimension; gridRow++)
     {
-      battlegrid_array[gridRow][gridColumn].drawGrid();
-
-      //rotate the ship on key-press
-      if(key == 'r' && keyIsPressed == true)
+      for(let gridColumn=0; gridColumn<grid_dimension; gridColumn++)
       {
-        rotateFlag+=90;
-        keyIsPressed = false;
+        battlegrid_array[gridRow][gridColumn].drawGrid();
 
-        if(rotateFlag == 360)
+        //rotate the ship on key-press
+        if(key == 'r' && keyIsPressed == true)
         {
-          rotateFlag = 0;
+          rotateFlag+=90;
+          keyIsPressed = false;
+
+          if(rotateFlag == 360)
+          {
+            rotateFlag = 0;
+          }
         }
-      }
-      
-      //shipNumber is just a loop variable
-      if(shipNumber < battleships_array.length)
-      {
-        // ship_blockSize is the size of the respective ship in blocks
-        let ship_blockSize = battleships_array[shipNumber].shipLength;
         
-        // passing ship_blockSize-1 as paramter because iterator starts from 0
-        battlegrid_array[gridRow][gridColumn].gridColor(ship_blockSize-1, shipNumber);
-        
-        // code to move on to next ship on mouse-press
-        if(mouseButton == LEFT && mouseIsPressed == true)
+        //shipNumber is just a loop variable
+        if(shipNumber < battleships_array.length)
         {
-          //remove all the grid IDs from Battleship, except the latest ones for the given ship_blockSize
-          battleships_array[shipNumber].shipGrids.splice(0, battleships_array[shipNumber].shipGrids.length-(ship_blockSize*2));
+          // ship_blockSize is the size of the respective ship in blocks
+          let ship_blockSize = battleships_array[shipNumber].shipLength;
+          
+          // passing ship_blockSize-1 as paramter because iterator starts from 0
+          battlegrid_array[gridRow][gridColumn].gridColor(ship_blockSize-1, shipNumber);
+          
+          // on mouse-click: "place" the ship & send coordinates to Battleship class
+          if(mouseButton == LEFT && mouseIsPressed == true && battlegrid_array[gridRow][gridColumn].grid_hoverFlag == 1)
+          {
+            //remove all the grid IDs from Battleship, except the latest ones for the given ship_blockSize
+            battleships_array[shipNumber].shipGrids.splice(0, battleships_array[shipNumber].shipGrids.length-(ship_blockSize*2));
+            print(battleships_array[shipNumber]);
 
-          shipNumber++;
-          mouseIsPressed = false;
+            for(let i=0; i<battleships_array[shipNumber].shipGrids.length; i+=2)
+            {
+              battlegrid_array[battleships_array[shipNumber].shipGrids[i]][battleships_array[shipNumber].shipGrids[i+1]].gridOccupied();
+            }
+
+            shipNumber++;
+            mouseIsPressed = false;
+          }
         }
       }
     }
