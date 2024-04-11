@@ -183,6 +183,63 @@ class P1_Battleships
   }
 }
 
+//function to generate ship images and page text content
+function setupScreenTexts(_shipNumber, _ship_blockSize)
+{
+  imageMode(CENTER);
+  textAlign(CENTER,CENTER);
+  noStroke();
+  fill(255);
+
+  textFont(gameFont_bold);
+  textSize(50);
+  text("SETUP | PLAYER "+gameFlag, width/2, height-(height/1.11));
+
+  switch(_shipNumber)
+  {
+    case 0: //destroyer
+      textSize(35);
+      textFont(gameFont_bold);
+      text("DESTROYER", width/1.4, height/1.235);
+
+      textSize(20);
+      textFont(gameFont_light);
+      image(shipImage1, width/1.55, height/1.8, width/2.5, height/2.5);
+      text("SHIP NUMBER: "+(_shipNumber+1)+" / "+p1_battleships_array.length, width/1.85, height/1.28);
+      text("SHIP SIZE: "+_ship_blockSize+" Blocks", width/1.85, height/1.22)
+      break;
+
+    case 1: //cruiser
+      textSize(35);
+      textFont(gameFont_bold);
+      text("CRUISER", width/1.4, height/1.235);
+
+      textSize(20);
+      textFont(gameFont_light);
+      image(shipImage2, width/1.55, height/1.95, width/2.25, height/2.25);
+      text("SHIP NUMBER: "+(_shipNumber+1)+" / "+p1_battleships_array.length, width/1.85, height/1.28);
+      text("SHIP SIZE: "+_ship_blockSize+" Blocks", width/1.855, height/1.22)
+      break;
+
+    case 2: //carrier
+      textSize(35);
+      textFont(gameFont_bold);
+      text("CARRIER", width/1.4, height/1.235);
+
+      textSize(20);
+      textFont(gameFont_light);
+      image(shipImage3, width/1.45, height/1.85, width/2.2, height/2.2);
+      text("SHIP NUMBER: "+(_shipNumber+1)+" / "+p1_battleships_array.length, width/1.85, height/1.28);
+      text("SHIP SIZE: "+_ship_blockSize+" Blocks", width/1.855, height/1.22)
+      break;
+  }
+
+  textFont(gameFont_light);
+  textSize(20);
+  text("Press [ R ] to rotate ship's orientation", width/5.1, height/1.14);
+  text("Click [ LEFT MOUSE ] button to place the ship", width/4.58, height/1.09);
+}
+
 function setup()
 {
   createCanvas(windowWidth, windowHeight);
@@ -219,20 +276,6 @@ function draw()
 
   if(gameFlag == 1)
   {
-    //page text content
-    textAlign(CENTER,CENTER);
-    textFont(gameFont_bold);
-    noStroke();
-    fill(255);
-
-    textSize(50);
-    text("SETUP | PLAYER 1", width/2, height-(height/1.11));
-    
-    textFont(gameFont_light);
-    textSize(20);
-    text("Press [ R ] to rotate ship's orientation", width/5.1, height/1.14);
-    text("Click [ LEFT MOUSE ] button to place the ship", width/4.58, height/1.09);
-
     //drawing the matrix (game board)
     for(let gridRow=0; gridRow<grid_dimension; gridRow++)
     {
@@ -263,49 +306,7 @@ function draw()
           p1_battlegrid_array[gridRow][gridColumn].gridColor(ship_blockSize-1, shipNumber);
 
           //generating ship images and related text content
-          imageMode(CENTER);
-          textAlign(CENTER,CENTER);
-          noStroke();
-          fill(255);
-
-          switch(shipNumber)
-          {
-            case 0: //destroyer
-              textSize(35);
-              textFont(gameFont_bold);
-              text("DESTROYER", width/1.4, height/1.235);
-
-              textSize(20);
-              textFont(gameFont_light);
-              image(shipImage1, width/1.55, height/1.8, width/2, height/2);
-              text("SHIP NUMBER: "+(shipNumber+1)+" / "+p1_battleships_array.length, width/1.85, height/1.28);
-              text("SHIP SIZE: "+ship_blockSize+" Blocks", width/1.85, height/1.22)
-              break;
-
-            case 1: //cruiser
-              textSize(35);
-              textFont(gameFont_bold);
-              text("CRUISER", width/1.4, height/1.235);
-
-              textSize(20);
-              textFont(gameFont_light);
-              image(shipImage2, width/1.55, height/1.95, width/2, height/2);
-              text("SHIP NUMBER: "+(shipNumber+1)+" / "+p1_battleships_array.length, width/1.85, height/1.28);
-              text("SHIP SIZE: "+ship_blockSize+" Blocks", width/1.855, height/1.22)
-              break;
-
-            case 2: //carrier
-              textSize(35);
-              textFont(gameFont_bold);
-              text("CARRIER", width/1.4, height/1.235);
-
-              textSize(20);
-              textFont(gameFont_light);
-              image(shipImage3, width/1.45, height/1.75, width/2, height/2);
-              text("SHIP NUMBER: "+(shipNumber+1)+" / "+p1_battleships_array.length, width/1.85, height/1.28);
-              text("SHIP SIZE: "+ship_blockSize+" Blocks", width/1.855, height/1.22)
-              break;
-          }
+          setupScreenTexts(shipNumber, ship_blockSize);
           
           //on mouse-click: "place" the ship & send coordinates to Battleship class
           if(mouseButton == LEFT && mouseIsPressed == true && p1_battlegrid_array[gridRow][gridColumn].grid_hoverFlag == 1)
