@@ -7,7 +7,7 @@ let backgroundImage;
 let shipImage1, shipImage2, shipImage3;
 let gameFont_bold, gameFont_light;
 
-//arrays for class objects
+//arrays for class objects for each player
 let p1_battlegrid_array = [];
 let p1_battleships_array = [];
 let p2_battlegrid_array = [];
@@ -45,7 +45,6 @@ class P1_Battlegrid
 
     this.grid_hoverFlag = 0;
     this.grid_occupiedFlag = 0;
-    this.grid_placedFlag = 0;
   }
   //function to draw squares of the matrix
   drawGrid()
@@ -72,11 +71,15 @@ class P1_Battlegrid
           p1_battlegrid_array[this.grid_id_row][this.grid_id_col+i].grid_fillColor = color(0,255,0,100);
           p1_battlegrid_array[this.grid_id_row][this.grid_id_col+i].grid_hoverFlag = 1;
 
-          //push grid IDs onto Battleship class for grids having hoverFlag = 1
-          if(p1_battlegrid_array[this.grid_id_row][this.grid_id_col+i].grid_occupiedFlag == 0)
+          //push grid IDs onto Battleship class for grids having hoverFlag = 1 & occupiedFlag = 0
+          if(p1_battlegrid_array[this.grid_id_row][this.grid_id_col].grid_occupiedFlag == 0)
           {
             p1_battleships_array[_shipNumber].shipGrids.push(p1_battlegrid_array[this.grid_id_row][this.grid_id_col+i].grid_id_row);
             p1_battleships_array[_shipNumber].shipGrids.push(p1_battlegrid_array[this.grid_id_row][this.grid_id_col+i].grid_id_col);
+          }
+          else
+          {
+            p1_battleships_array[_shipNumber].shipGrids = [];
           }
         }
       }
@@ -88,11 +91,15 @@ class P1_Battlegrid
           p1_battlegrid_array[this.grid_id_row+i][this.grid_id_col].grid_fillColor = color(0,255,0,100);
           p1_battlegrid_array[this.grid_id_row+i][this.grid_id_col].grid_hoverFlag = 1;
 
-          //push grid IDs onto Battleship class for grids having hoverFlag = 1
-          if(p1_battlegrid_array[this.grid_id_row+i][this.grid_id_col].grid_occupiedFlag == 0)
+          //push grid IDs onto Battleship class for grids having hoverFlag = 1 & occupiedFlag = 0
+          if(p1_battlegrid_array[this.grid_id_row][this.grid_id_col].grid_occupiedFlag == 0)
           {
             p1_battleships_array[_shipNumber].shipGrids.push(p1_battlegrid_array[this.grid_id_row+i][this.grid_id_col].grid_id_row);
             p1_battleships_array[_shipNumber].shipGrids.push(p1_battlegrid_array[this.grid_id_row+i][this.grid_id_col].grid_id_col);
+          }
+          else
+          {
+            p1_battleships_array[_shipNumber].shipGrids = [];
           }
         }        
       }
@@ -104,11 +111,15 @@ class P1_Battlegrid
           p1_battlegrid_array[this.grid_id_row][this.grid_id_col-i].grid_fillColor = color(0,255,0,100);
           p1_battlegrid_array[this.grid_id_row][this.grid_id_col-i].grid_hoverFlag = 1;
 
-          //push grid IDs onto Battleship class for grids having hoverFlag = 1
-          if(p1_battlegrid_array[this.grid_id_row][this.grid_id_col-i].grid_occupiedFlag == 0)
+          //push grid IDs onto Battleship class for grids having hoverFlag = 1 & occupiedFlag = 0
+          if(p1_battlegrid_array[this.grid_id_row][this.grid_id_col].grid_occupiedFlag == 0)
           {
             p1_battleships_array[_shipNumber].shipGrids.push(p1_battlegrid_array[this.grid_id_row][this.grid_id_col-i].grid_id_row);
             p1_battleships_array[_shipNumber].shipGrids.push(p1_battlegrid_array[this.grid_id_row][this.grid_id_col-i].grid_id_col);
+          }
+          else
+          {
+            p1_battleships_array[_shipNumber].shipGrids = [];
           }
         }        
       }
@@ -120,11 +131,15 @@ class P1_Battlegrid
           p1_battlegrid_array[this.grid_id_row-i][this.grid_id_col].grid_fillColor = color(0,255,0,100);
           p1_battlegrid_array[this.grid_id_row-i][this.grid_id_col].grid_hoverFlag = 1;
 
-          //push grid IDs onto Battleship class for grids having hoverFlag = 1
-          if(p1_battlegrid_array[this.grid_id_row-i][this.grid_id_col].grid_occupiedFlag == 0)
+          //push grid IDs onto Battleship class for grids having hoverFlag = 1 & occupiedFlag = 0
+          if(p1_battlegrid_array[this.grid_id_row][this.grid_id_col].grid_occupiedFlag == 0)
           {
             p1_battleships_array[_shipNumber].shipGrids.push(p1_battlegrid_array[this.grid_id_row-i][this.grid_id_col].grid_id_row);
             p1_battleships_array[_shipNumber].shipGrids.push(p1_battlegrid_array[this.grid_id_row-i][this.grid_id_col].grid_id_col);
+          }
+          else
+          {
+            p1_battleships_array[_shipNumber].shipGrids = [];
           }
         }        
       }
@@ -159,7 +174,7 @@ class P1_Battlegrid
     else
     {
       //resetting hoverFlag & fill once mouse moves away, and if any ship is not placed in the grid
-      if(this.grid_placedFlag != 1)
+      if(this.grid_occupiedFlag != 1)
       {
         this.grid_fillColor = color(0,0,25,100);
       }
@@ -168,10 +183,10 @@ class P1_Battlegrid
     }
   }
   // 
-  gridOccupied()
+  gridOccupied(_colorIndicator)
   {
+    this.grid_occupiedFlag = 1;
     this.grid_fillColor = color(0,255,0,100);
-    this.grid_placedFlag = 1;
   }
 }
 
@@ -201,7 +216,6 @@ class P2_Battlegrid
 
     this.grid_hoverFlag = 0;
     this.grid_occupiedFlag = 0;
-    this.grid_placedFlag = 0;
   }
   //function to draw squares of the matrix
   drawGrid()
@@ -228,11 +242,15 @@ class P2_Battlegrid
           p2_battlegrid_array[this.grid_id_row][this.grid_id_col+i].grid_fillColor = color(0,255,0,100);
           p2_battlegrid_array[this.grid_id_row][this.grid_id_col+i].grid_hoverFlag = 1;
 
-          //push grid IDs onto Battleship class for grids having hoverFlag = 1
-          if(p2_battlegrid_array[this.grid_id_row][this.grid_id_col+i].grid_occupiedFlag == 0)
+          //push grid IDs onto Battleship class for grids having hoverFlag = 1 & occupiedFlag = 0;
+          if(p2_battlegrid_array[this.grid_id_row][this.grid_id_col].grid_occupiedFlag == 0)
           {
             p2_battleships_array[_shipNumber].shipGrids.push(p2_battlegrid_array[this.grid_id_row][this.grid_id_col+i].grid_id_row);
             p2_battleships_array[_shipNumber].shipGrids.push(p2_battlegrid_array[this.grid_id_row][this.grid_id_col+i].grid_id_col);
+          }
+          else
+          {
+            p2_battleships_array[_shipNumber].shipGrids = [];
           }
         }
       }
@@ -244,11 +262,15 @@ class P2_Battlegrid
           p2_battlegrid_array[this.grid_id_row+i][this.grid_id_col].grid_fillColor = color(0,255,0,100);
           p2_battlegrid_array[this.grid_id_row+i][this.grid_id_col].grid_hoverFlag = 1;
 
-          //push grid IDs onto Battleship class for grids having hoverFlag = 1
-          if(p2_battlegrid_array[this.grid_id_row+i][this.grid_id_col].grid_occupiedFlag == 0)
+          //push grid IDs onto Battleship class for grids having hoverFlag = 1 & occupiedFlag = 0
+          if(p2_battlegrid_array[this.grid_id_row][this.grid_id_col].grid_occupiedFlag == 0)
           {
             p2_battleships_array[_shipNumber].shipGrids.push(p2_battlegrid_array[this.grid_id_row+i][this.grid_id_col].grid_id_row);
             p2_battleships_array[_shipNumber].shipGrids.push(p2_battlegrid_array[this.grid_id_row+i][this.grid_id_col].grid_id_col);
+          }
+          else
+          {
+            p2_battleships_array[_shipNumber].shipGrids = [];
           }
         }        
       }
@@ -260,11 +282,15 @@ class P2_Battlegrid
           p2_battlegrid_array[this.grid_id_row][this.grid_id_col-i].grid_fillColor = color(0,255,0,100);
           p2_battlegrid_array[this.grid_id_row][this.grid_id_col-i].grid_hoverFlag = 1;
 
-          //push grid IDs onto Battleship class for grids having hoverFlag = 1
-          if(p2_battlegrid_array[this.grid_id_row][this.grid_id_col-i].grid_occupiedFlag == 0)
+          //push grid IDs onto Battleship class for grids having hoverFlag = 1 & occupiedFlag = 0
+          if(p2_battlegrid_array[this.grid_id_row][this.grid_id_col].grid_occupiedFlag == 0)
           {
             p2_battleships_array[_shipNumber].shipGrids.push(p2_battlegrid_array[this.grid_id_row][this.grid_id_col-i].grid_id_row);
             p2_battleships_array[_shipNumber].shipGrids.push(p2_battlegrid_array[this.grid_id_row][this.grid_id_col-i].grid_id_col);
+          }
+          else
+          {
+            p2_battleships_array[_shipNumber].shipGrids = [];
           }
         }        
       }
@@ -276,11 +302,15 @@ class P2_Battlegrid
           p2_battlegrid_array[this.grid_id_row-i][this.grid_id_col].grid_fillColor = color(0,255,0,100);
           p2_battlegrid_array[this.grid_id_row-i][this.grid_id_col].grid_hoverFlag = 1;
 
-          //push grid IDs onto Battleship class for grids having hoverFlag = 1
-          if(p2_battlegrid_array[this.grid_id_row-i][this.grid_id_col].grid_occupiedFlag == 0)
+          //push grid IDs onto Battleship class for grids having hoverFlag = 1 & occupiedFlag = 0
+          if(p2_battlegrid_array[this.grid_id_row][this.grid_id_col].grid_occupiedFlag == 0)
           {
             p2_battleships_array[_shipNumber].shipGrids.push(p2_battlegrid_array[this.grid_id_row-i][this.grid_id_col].grid_id_row);
             p2_battleships_array[_shipNumber].shipGrids.push(p2_battlegrid_array[this.grid_id_row-i][this.grid_id_col].grid_id_col);
+          }
+          else
+          {
+            p2_battleships_array[_shipNumber].shipGrids = [];
           }
         }        
       }
@@ -315,7 +345,7 @@ class P2_Battlegrid
     else
     {
       //resetting hoverFlag & fill once mouse moves away, and if any ship is not placed in the grid
-      if(this.grid_placedFlag != 1)
+      if(this.grid_occupiedFlag != 1)
       {
         this.grid_fillColor = color(0,0,25,100);
       }
@@ -327,7 +357,7 @@ class P2_Battlegrid
   gridOccupied()
   {
     this.grid_fillColor = color(0,255,0,100);
-    this.grid_placedFlag = 1;
+    this.grid_occupiedFlag = 1;
   }
 }
 
@@ -394,8 +424,8 @@ function setupScreenTexts(_shipNumber, _ship_blockSize)
 
   textFont(gameFont_light);
   textSize(20);
-  text("Press [ R ] to rotate ship's orientation", width/5.1, height/1.14);
-  text("Click [ LEFT MOUSE ] button to place the ship", width/4.58, height/1.09);
+  text("Press [ R ] to rotate ship's orientation", width/4.2, height/1.14);
+  text("Click [ LEFT MOUSE ] button to place the ship", width/4.19, height/1.09);
 }
 
 function setup()
@@ -489,30 +519,54 @@ function draw()
 
           //generating ship images and related text content
           setupScreenTexts(shipNumber, ship_blockSize);
-          
+
           //on mouse-click: "place" the ship & send coordinates to Battleship class
           if(mouseButton == LEFT && mouseIsPressed == true && p1_battlegrid_array[gridRow][gridColumn].grid_hoverFlag == 1)
           {
-            //remove all the grid IDs from Battleship, except the latest ones for the given ship_blockSize
-            p1_battleships_array[shipNumber].shipGrids.splice(0, p1_battleships_array[shipNumber].shipGrids.length-(ship_blockSize*2));
-
-            for(let i=0; i<p1_battleships_array[shipNumber].shipGrids.length; i+=2)
+            if(p1_battlegrid_array[gridRow][gridColumn].grid_occupiedFlag == 0)
             {
-              p1_battlegrid_array[p1_battleships_array[shipNumber].shipGrids[i]][p1_battleships_array[shipNumber].shipGrids[i+1]].gridOccupied();
+              //remove all the grid IDs from Battleship, except the latest ones for the given ship_blockSize
+              p1_battleships_array[shipNumber].shipGrids.splice(0, p1_battleships_array[shipNumber].shipGrids.length-(ship_blockSize*2));
+
+              for(let i=0; i<p1_battleships_array[shipNumber].shipGrids.length; i+=2)
+              {
+                p1_battlegrid_array[p1_battleships_array[shipNumber].shipGrids[i]][p1_battleships_array[shipNumber].shipGrids[i+1]].gridOccupied();
+              }            
+
+              imageMode(CORNER);
+              background(backgroundImage);
+
+              shipNumber++;
+              mouseIsPressed = false;
             }
-
-            imageMode(CORNER);
-            background(backgroundImage);
-
-            shipNumber++;
-            mouseIsPressed = false;
+            else
+            {
+              //keep the loop running on same shipNumber
+            }
           }
         }
         //all ships have been placed
         else
         {
-          gameFlag = 2;
-          shipNumber = 0;
+          textAlign(CENTER,CENTER);
+          noStroke();
+          fill(255);
+
+          textFont(gameFont_bold);
+          textSize(50);
+          text("SETUP | PLAYER "+gameFlag, width/2, height-(height/1.11));
+          textSize(30);
+          text("Your ships have been placed!", width/1.85, height/2.2);
+          textFont(gameFont_light);
+          textSize(20);
+          text("Press [ ENTER ] to confirm your setup", width/1.94, height/1.98);
+
+          if(keyCode == ENTER)
+          {
+            gameFlag = 2;
+            shipNumber = 0;
+            background(backgroundImage);
+          }
         }
       }
     }
@@ -544,7 +598,7 @@ function draw()
         
         //shipNumber is just a loop variable
         if(shipNumber < p2_battleships_array.length)
-        {          
+        {
           //ship_blockSize is the size of the respective ship in blocks
           let ship_blockSize = p2_battleships_array[shipNumber].shipLength;
           
@@ -557,28 +611,59 @@ function draw()
           //on mouse-click: "place" the ship & send coordinates to Battleship class
           if(mouseButton == LEFT && mouseIsPressed == true && p2_battlegrid_array[gridRow][gridColumn].grid_hoverFlag == 1)
           {
-            //remove all the grid IDs from Battleship, except the latest ones for the given ship_blockSize
-            p2_battleships_array[shipNumber].shipGrids.splice(0, p2_battleships_array[shipNumber].shipGrids.length-(ship_blockSize*2));
-
-            for(let i=0; i<p2_battleships_array[shipNumber].shipGrids.length; i+=2)
+            if(p2_battlegrid_array[gridRow][gridColumn].grid_occupiedFlag == 0)
             {
-              p2_battlegrid_array[p2_battleships_array[shipNumber].shipGrids[i]][p2_battleships_array[shipNumber].shipGrids[i+1]].gridOccupied();
+              //remove all the grid IDs from Battleship, except the latest ones for the given ship_blockSize
+              p2_battleships_array[shipNumber].shipGrids.splice(0, p2_battleships_array[shipNumber].shipGrids.length-(ship_blockSize*2));
+
+              for(let i=0; i<p2_battleships_array[shipNumber].shipGrids.length; i+=2)
+              {
+                p2_battlegrid_array[p2_battleships_array[shipNumber].shipGrids[i]][p2_battleships_array[shipNumber].shipGrids[i+1]].gridOccupied();
+              }
+
+              imageMode(CORNER);
+              background(backgroundImage);
+
+              shipNumber++;
+              mouseIsPressed = false;
             }
-
-            imageMode(CORNER);
-            background(backgroundImage);
-
-            shipNumber++;
-            mouseIsPressed = false;
+            else
+            {
+              //keep the loop running on same shipNumber
+            }
           }
         }
         //all ships have been placed
         else
         {
-          gameFlag = 3;
-          break;
+          textAlign(CENTER,CENTER);
+          noStroke();
+          fill(255);
+
+          textFont(gameFont_bold);
+          textSize(50);
+          text("SETUP | PLAYER "+gameFlag, width/2, height-(height/1.11));
+          textSize(30);
+          text("Your ships have been placed!", width/1.85, height/2.2);
+          textFont(gameFont_light);
+          textSize(20);
+          text("Press [ ENTER ] to confirm your setup", width/1.94, height/1.98);
+
+          if(keyCode == ENTER && keyIsPressed == true)
+          {
+            gameFlag = 3;
+            shipNumber = 0;
+            keyIsPressed = false;
+          }
         }
       }
     }
+  }
+
+  // --- MAIN GAMEPLAY INTERFACE --- //
+
+  else if(gameFlag == 3)
+  {
+    //
   }
 }
