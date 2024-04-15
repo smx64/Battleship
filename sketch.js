@@ -1,12 +1,14 @@
 //set game board dimensions & gameplay-related flags
 let grid_dimension = 7;
 let gameFlag = 1;
-let shipNumber = 0;
+let p1_shipNumber = 0;
+let p2_shipNumber = 0;
 let rotateFlag = 0;
 
 // let activePlayer = 1;
 let allDestroyed_P1 = 0;
 let allDestroyed_P2 = 0;
+let gameOver = 0;
 
 //initializing aesthetic asset variables
 let backgroundImage;
@@ -716,17 +718,17 @@ function draw()
           }
         }
         
-        //shipNumber is just a loop variable
-        if(shipNumber < p1_battleships_array.length)
+        //p1_shipNumber is just a loop variable
+        if(p1_shipNumber < p1_battleships_array.length)
         {          
           //ship_blockSize is the size of the respective ship in blocks
-          let ship_blockSize = p1_battleships_array[shipNumber].shipLength;
+          let ship_blockSize = p1_battleships_array[p1_shipNumber].shipLength;
           
           //passing ship_blockSize-1 as paramter because iterator starts from 0
-          p1_battlegrid_array[gridRow][gridColumn].gridColor(ship_blockSize-1, shipNumber);
+          p1_battlegrid_array[gridRow][gridColumn].gridColor(ship_blockSize-1, p1_shipNumber);
 
           //generating ship images and related text content
-          p1_setupScreenTexts(shipNumber, ship_blockSize);
+          p1_setupScreenTexts(p1_shipNumber, ship_blockSize);
 
           //on mouse-click: "place" the ship & send coordinates to Battleship class
           if(mouseButton == LEFT && mouseIsPressed == true && p1_battlegrid_array[gridRow][gridColumn].grid_hoverFlag == 1)
@@ -734,14 +736,14 @@ function draw()
             if(p1_battlegrid_array[gridRow][gridColumn].grid_occupiedFlag == 0)
             {
               //remove all the grid IDs from Battleship, except the latest ones for the given ship_blockSize
-              p1_battleships_array[shipNumber].shipGrids.splice(0, p1_battleships_array[shipNumber].shipGrids.length-(ship_blockSize*2));
+              p1_battleships_array[p1_shipNumber].shipGrids.splice(0, p1_battleships_array[p1_shipNumber].shipGrids.length-(ship_blockSize*2));
 
-              for(let i=0; i<p1_battleships_array[shipNumber].shipGrids.length; i+=2)
+              for(let i=0; i<p1_battleships_array[p1_shipNumber].shipGrids.length; i+=2)
               {
-                p1_battlegrid_array[p1_battleships_array[shipNumber].shipGrids[i]][p1_battleships_array[shipNumber].shipGrids[i+1]].gridOccupied();
+                p1_battlegrid_array[p1_battleships_array[p1_shipNumber].shipGrids[i]][p1_battleships_array[p1_shipNumber].shipGrids[i+1]].gridOccupied();
               }            
 
-              shipNumber++;
+              p1_shipNumber++;
               mouseIsPressed = false;
             }
             else
@@ -766,10 +768,10 @@ function draw()
           textSize(20);
           text("Press [ ENTER ] to confirm your setup", width/1.94, height/1.98);
 
-          if(keyCode == ENTER)
+          if(keyCode == ENTER && keyIsPressed == true)
           {
             gameFlag = 2;
-            shipNumber = 0;
+            keyIsPressed = false;
             print(p1_battleships_array);
             break;
           }
@@ -802,17 +804,17 @@ function draw()
           }
         }
 
-        //shipNumber is just a loop variable
-        if(shipNumber < p2_battleships_array.length)
+        //p2_shipNumber is just a loop variable
+        if(p2_shipNumber < p2_battleships_array.length)
         {
           //ship_blockSize is the size of the respective ship in blocks
-          let ship_blockSize = p2_battleships_array[shipNumber].shipLength;
+          let ship_blockSize = p2_battleships_array[p2_shipNumber].shipLength;
           
           //passing ship_blockSize-1 as paramter because iterator starts from 0
-          p2_battlegrid_array[gridRow][gridColumn].gridColor(ship_blockSize-1, shipNumber);
+          p2_battlegrid_array[gridRow][gridColumn].gridColor(ship_blockSize-1, p2_shipNumber);
 
           //generating ship images and related text content
-          p2_setupScreenTexts(shipNumber, ship_blockSize);
+          p2_setupScreenTexts(p2_shipNumber, ship_blockSize);
           
           //on mouse-click: "place" the ship & send coordinates to Battleship class
           if(mouseButton == LEFT && mouseIsPressed == true && p2_battlegrid_array[gridRow][gridColumn].grid_hoverFlag == 1)
@@ -820,14 +822,14 @@ function draw()
             if(p2_battlegrid_array[gridRow][gridColumn].grid_occupiedFlag == 0)
             {
               //remove all the grid IDs from Battleship, except the latest ones for the given ship_blockSize
-              p2_battleships_array[shipNumber].shipGrids.splice(0, p2_battleships_array[shipNumber].shipGrids.length-(ship_blockSize*2));
+              p2_battleships_array[p2_shipNumber].shipGrids.splice(0, p2_battleships_array[p2_shipNumber].shipGrids.length-(ship_blockSize*2));
 
-              for(let i=0; i<p2_battleships_array[shipNumber].shipGrids.length; i+=2)
+              for(let i=0; i<p2_battleships_array[p2_shipNumber].shipGrids.length; i+=2)
               {
-                p2_battlegrid_array[p2_battleships_array[shipNumber].shipGrids[i]][p2_battleships_array[shipNumber].shipGrids[i+1]].gridOccupied();
+                p2_battlegrid_array[p2_battleships_array[p2_shipNumber].shipGrids[i]][p2_battleships_array[p2_shipNumber].shipGrids[i+1]].gridOccupied();
               }
 
-              shipNumber++;
+              p2_shipNumber++;
               mouseIsPressed = false;
             }
             else
@@ -932,7 +934,9 @@ function draw()
 
     if(allDestroyed_P1 == 3 || allDestroyed_P2 == 3)
     {
-      print("GAME OVER");
+      fill(0,0,0,100);
+      noStroke();
+      rect(0,0,width,height);
       noLoop();
     }
   }
