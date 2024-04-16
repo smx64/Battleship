@@ -4,11 +4,13 @@ let gameFlag = 1;
 let p1_shipNumber = 0;
 let p2_shipNumber = 0;
 let rotateFlag = 0;
+let oneLoop = 0;
 
-// let activePlayer = 1;
-let allDestroyed_P1 = 0;
+let activeSide = 'R';
+let allDestroyed_P1 = 1;
 let allDestroyed_P2 = 0;
-let gameOver = 0;
+let prevCheck_P1 = 0;
+let prevCheck_P2 = 0;
 
 //initializing aesthetic asset variables
 let backgroundImage;
@@ -201,7 +203,7 @@ class P1_Battlegrid
     }
   }
   //set grid color & occupiedFlag = 1 when square selected (on mouse-click)
-  gridOccupied(_colorIndicator)
+  gridOccupied()
   {
     this.grid_occupiedFlag = 1;
     this.grid_fillColor = color(0,255,0);
@@ -226,8 +228,8 @@ class P1_Battlegrid
       }
     }
   }
-  //change grid color on mouse-click based on occupiedFlag value & check whether all ships destroyed or not
-  gameplay_gridClicked(_shipSizes)
+  //change grid color on mouse-click based on occupiedFlag value
+  gameplay_gridClicked()
   {
     this.clickedFlag = 1; 
     this.grid_hoverFlag = 0;
@@ -244,12 +246,6 @@ class P1_Battlegrid
           if(this.grid_id_row == p1_battleships_array[i].shipGrids[j] && this.grid_id_col == p1_battleships_array[i].shipGrids[j+1])
           {
             ship_clickCounter_P1[i]++;
-
-            //code snippet to check whether a ship got completely destroyed or not
-            if(_shipSizes[i] == ship_clickCounter_P1[i])
-            {
-              allDestroyed_P1+=1;
-            }
           }
         }
       }
@@ -460,8 +456,8 @@ class P2_Battlegrid
       }
     }
   }
-  //change grid color on mouse-click based on occupiedFlag value & check whether all ships destroyed or not
-  gameplay_gridClicked(_shipSizes)
+  //change grid color on mouse-click based on occupiedFlag value
+  gameplay_gridClicked()
   {
     this.clickedFlag = 1; 
     this.grid_hoverFlag = 0;
@@ -478,12 +474,6 @@ class P2_Battlegrid
           if(this.grid_id_row == p2_battleships_array[i].shipGrids[j] && this.grid_id_col == p2_battleships_array[i].shipGrids[j+1])
           {
             ship_clickCounter_P2[i]++;
-
-            //code snippet to check whether a ship got completely destroyed or not
-            if(_shipSizes[i] == ship_clickCounter_P2[i])
-            {
-              allDestroyed_P2+=1;
-            }
           }
         }
       }
@@ -492,6 +482,11 @@ class P2_Battlegrid
     {
       this.grid_fillColor = color(0,255,0,150);
     }
+  }
+  //
+  gridColorReset()
+  {
+    this.grid_fillColor = color(0,0,25,150);
   }
 }
 
@@ -772,7 +767,6 @@ function draw()
           {
             gameFlag = 2;
             keyIsPressed = false;
-            print(p1_battleships_array);
             break;
           }
         }
@@ -858,7 +852,6 @@ function draw()
           {
             gameFlag = 3;
             keyIsPressed = false;
-            print(p2_battleships_array);
             break;
           }
         }
@@ -870,7 +863,13 @@ function draw()
 
   else if(gameFlag == 3)
   {
-    // // MANUAL ENTRY FOR TESTING PURPOSES ONLY..
+    fill(255);
+    noStroke();
+    textAlign(CENTER,CENTER);
+    textFont(gameFont_bold);
+    textSize(60);
+
+    // MANUAL ENTRY FOR TESTING PURPOSES ONLY..
     // p1_battlegrid_array[0][0].grid_occupiedFlag = 1;
     // p1_battlegrid_array[0][1].grid_occupiedFlag = 1;
     // p1_battlegrid_array[1][0].grid_occupiedFlag = 1;
@@ -898,46 +897,104 @@ function draw()
     // p2_battleships_array[0].shipGrids = [4,5,4,6];
     // p2_battleships_array[1].shipGrids = [5,4,5,5,5,6];
     // p2_battleships_array[2].shipGrids = [6,3,6,4,6,5,6,6];
-    // // ACTUAL CODE FROM BELOW..
+    // ACTUAL CODE FROM BELOW..
 
     // PLAYER 1 INTERFACE //
-    for(let gridRow=0; gridRow<grid_dimension; gridRow++)
-    {
-      for(let gridColumn=0; gridColumn<grid_dimension; gridColumn++)
-      {
-        p1_battlegrid_array[gridRow][gridColumn].drawGrid();
-        p1_battlegrid_array[gridRow][gridColumn].gameplay_gridHover();
-
-        if(mouseButton == LEFT && mouseIsPressed == true && p1_battlegrid_array[gridRow][gridColumn].grid_hoverFlag == 1)
-        {
-          p1_battlegrid_array[gridRow][gridColumn].gameplay_gridClicked(ship_sizes);
-          mouseIsPressed = false;
-        }
-      }
-    }
-  
-    // PLAYER 2 INTERFACE //
+    text("PLAYER 1", width/1.365, height-(height/1.15));
     for(let gridRow=0; gridRow<grid_dimension; gridRow++)
     {
       for(let gridColumn=0; gridColumn<grid_dimension; gridColumn++)
       {
         p2_battlegrid_array[gridRow][gridColumn].drawGrid();
-        p2_battlegrid_array[gridRow][gridColumn].gameplay_gridHover();
 
-        if(mouseButton == LEFT && mouseIsPressed == true && p2_battlegrid_array[gridRow][gridColumn].grid_hoverFlag == 1)
+        if(activeSide == 'R')
         {
-          p2_battlegrid_array[gridRow][gridColumn].gameplay_gridClicked(ship_sizes);
-          mouseIsPressed = false;
+          p2_battlegrid_array[gridRow][gridColumn].gameplay_gridHover();
+          if(mouseButton == LEFT && mouseIsPressed == true && p2_battlegrid_array[gridRow][gridColumn].grid_hoverFlag == 1)
+          {
+            p2_battlegrid_array[gridRow][gridColumn].gameplay_gridClicked();
+            activeSide = 'L';
+            mouseIsPressed = false;
+          }
         }
       }
     }
 
-    if(allDestroyed_P1 == 3 || allDestroyed_P2 == 3)
+    // PLAYER 2 INTERFACE //
+    fill(255);
+    noStroke();
+    text("PLAYER 2", width/4.165, height-(height/1.15)); 
+    for(let gridRow=0; gridRow<grid_dimension; gridRow++)
     {
-      fill(0,0,0,100);
-      noStroke();
-      rect(0,0,width,height);
-      noLoop();
+      for(let gridColumn=0; gridColumn<grid_dimension; gridColumn++)
+      {
+        p1_battlegrid_array[gridRow][gridColumn].drawGrid();
+
+        if(activeSide == 'L')
+        {
+          p1_battlegrid_array[gridRow][gridColumn].gameplay_gridHover();
+          if(mouseButton == LEFT && mouseIsPressed == true && p1_battlegrid_array[gridRow][gridColumn].grid_hoverFlag == 1)
+          {
+            p1_battlegrid_array[gridRow][gridColumn].gameplay_gridClicked();
+            activeSide = 'R';
+            mouseIsPressed = false;
+          }
+        }
+        //resetting grid colors for player 2 matrix just during the first round
+        else if(activeSide == 'R' && oneLoop == 0)
+        {
+          p1_battlegrid_array[gridRow][gridColumn].grid_fillColor = color(0,0,25,150);
+          p1_battlegrid_array[gridRow][gridColumn].grid_strokeColor = color(150);
+        }
+      }
+    }
+
+    //check variable to remove grid color just for the first round
+    oneLoop = 1;
+
+    //black overlay depending on which side is active
+    fill(0,175);
+    noStroke(); 
+    rectMode(CORNER);
+    if(activeSide == "R")
+    {
+      rect(0, 0, width/2, height);
+    }
+    else if(activeSide == "L")
+    {
+      rect(width/2, 0 ,width/2, height);
+    }
+
+    //code snippet to check whether all ships destroyed or not
+    for(let i=0, j=0; i<ship_sizes.length, j<ship_sizes.length; i++, j++)
+    {
+      if(ship_sizes[i] == ship_clickCounter_P2[i])
+      {
+        prevCheck_P2 = allDestroyed_P2;
+        allDestroyed_P2 = i+1;
+      }
+
+      if(ship_sizes[i] == ship_clickCounter_P1[i])
+      {
+        prevCheck_P1 = allDestroyed_P1;
+        allDestroyed_P1 = i+1;
+      }
+
+      if((allDestroyed_P2 == 3 && (allDestroyed_P2-prevCheck_P2)==1) || (allDestroyed_P1 == 3 && (allDestroyed_P1-prevCheck_P1)==1))
+      {
+        fill(0,0,0,200);
+        noStroke();
+        rectMode(CENTER);
+        rect(width/2, height/2, width, height);
+
+        textAlign(CENTER,CENTER);
+        textFont(gameFont_bold);
+        textSize(60);
+        fill(255);
+        text("GAME OVER", width/2, height/2);
+
+        noLoop();
+      }
     }
   }
 }
