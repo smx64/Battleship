@@ -7,10 +7,9 @@ let rotateFlag = 0;
 let oneLoop = 0;
 
 let activeSide = 'R';
-let allDestroyed_P1 = 1;
+let allDestroyed_P1 = 0;
 let allDestroyed_P2 = 0;
-let prevCheck_P1 = 0;
-let prevCheck_P2 = 0;
+let total_shipGrids = 0;
 
 //initializing aesthetic asset variables
 let backgroundImage;
@@ -237,6 +236,7 @@ class P1_Battlegrid
     if(this.grid_occupiedFlag == 1)
     {
       this.grid_fillColor = color(255,0,0,150);
+      allDestroyed_P1 +=1;
       
       //functionality to count which ship got clicked
       for(let i=0; i<p1_battleships_array.length; i++)
@@ -465,6 +465,7 @@ class P2_Battlegrid
     if(this.grid_occupiedFlag == 1)
     {
       this.grid_fillColor = color(255,0,0,150);
+      allDestroyed_P2 +=1;
 
       //functionality to count which ship got clicked
       for(let i=0; i<p1_battleships_array.length; i++)
@@ -949,52 +950,47 @@ function draw()
       }
     }
 
-    //check variable to remove grid color just for the first round
+    //calculating the total number of grids occupied by ships (same for both players)
+    if(oneLoop == 0)
+    {
+      for(let i=0; i<p1_battleships_array.length; i++)
+      {
+        total_shipGrids += p1_battleships_array[i].shipGrids.length;
+      }
+      total_shipGrids = total_shipGrids/2;      
+    }
+
+    //variable to run loops only for one round
     oneLoop = 1;
 
     //black overlay depending on which side is active
     fill(0,175);
     noStroke(); 
     rectMode(CORNER);
-    if(activeSide == "R")
+    if(activeSide == 'R')
     {
       rect(0, 0, width/2, height);
     }
-    else if(activeSide == "L")
+    else if(activeSide == 'L')
     {
-      rect(width/2, 0 ,width/2, height);
+      rect(width/2, 0, width/2, height);
     }
 
-    //code snippet to check whether all ships destroyed or not
-    for(let i=0, j=0; i<ship_sizes.length, j<ship_sizes.length; i++, j++)
+    //code snippet to check whether all ships destroyed for a player
+    if(allDestroyed_P1 == total_shipGrids || allDestroyed_P2 == total_shipGrids)
     {
-      if(ship_sizes[i] == ship_clickCounter_P2[i])
-      {
-        prevCheck_P2 = allDestroyed_P2;
-        allDestroyed_P2 = i+1;
-      }
+      activeSide = 'X';
 
-      if(ship_sizes[i] == ship_clickCounter_P1[i])
-      {
-        prevCheck_P1 = allDestroyed_P1;
-        allDestroyed_P1 = i+1;
-      }
+      fill(0,0,0,150);
+      noStroke();
+      rectMode(CENTER);
+      rect(width/2, height/2, width, height);
 
-      if((allDestroyed_P2 == 3 && (allDestroyed_P2-prevCheck_P2)==1) || (allDestroyed_P1 == 3 && (allDestroyed_P1-prevCheck_P1)==1))
-      {
-        fill(0,0,0,200);
-        noStroke();
-        rectMode(CENTER);
-        rect(width/2, height/2, width, height);
-
-        textAlign(CENTER,CENTER);
-        textFont(gameFont_bold);
-        textSize(60);
-        fill(255);
-        text("GAME OVER", width/2, height/2);
-
-        noLoop();
-      }
+      textAlign(CENTER,CENTER);
+      textFont(gameFont_bold);
+      textSize(60);
+      fill(255);
+      text("GAME OVER", width/2, height/2);
     }
   }
 }
