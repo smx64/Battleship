@@ -6,10 +6,13 @@ let p2_shipNumber = 0;
 let rotateFlag = 0;
 let oneLoop = 0;
 
-let activeSide = 'R';
+let activeSide = 'L';
 let allDestroyed_P1 = 0;
 let allDestroyed_P2 = 0;
 let total_shipGrids = 0;
+
+let shipDestroyed = 0;
+let shipID_Destroyed = 0;
 
 //initializing aesthetic asset variables
 let backgroundImage;
@@ -23,7 +26,8 @@ let p2_battlegrid_array = [];
 let p2_battleships_array = [];
 
 //array containing block sizes of all battleships
-let ship_sizes = [2,3,4];
+let ship_sizes = [2,3,3,4];
+let ship_names = ["DESTROYER", "CRUISER", "CARRIER"];
 let ship_clickCounter_P1 = [0,0,0];
 let ship_clickCounter_P2 = [0,0,0];
 
@@ -228,10 +232,11 @@ class P1_Battlegrid
     }
   }
   //change grid color on mouse-click based on occupiedFlag value
-  gameplay_gridClicked()
+  gameplay_gridClicked(_ship_sizes)
   {
     this.clickedFlag = 1; 
     this.grid_hoverFlag = 0;
+    shipDestroyed = 0;
 
     if(this.grid_occupiedFlag == 1)
     {
@@ -246,6 +251,11 @@ class P1_Battlegrid
           if(this.grid_id_row == p1_battleships_array[i].shipGrids[j] && this.grid_id_col == p1_battleships_array[i].shipGrids[j+1])
           {
             ship_clickCounter_P1[i]++;
+            if(ship_clickCounter_P1[i] == _ship_sizes[i])
+            {
+              shipDestroyed = 1;
+              shipID_Destroyed = i;
+            }
           }
         }
       }
@@ -260,9 +270,10 @@ class P1_Battlegrid
 //class initialization for the ships - player 1
 class P1_Battleships
 {
-  constructor(_shipLength)
+  constructor(_shipLength, _shipType)
   {
     this.shipLength = _shipLength;
+    this.shipType = _shipType;
     this.shipGrids = [];
   }
 }
@@ -457,10 +468,11 @@ class P2_Battlegrid
     }
   }
   //change grid color on mouse-click based on occupiedFlag value
-  gameplay_gridClicked()
+  gameplay_gridClicked(_ship_sizes)
   {
     this.clickedFlag = 1; 
     this.grid_hoverFlag = 0;
+    shipDestroyed = 0;
 
     if(this.grid_occupiedFlag == 1)
     {
@@ -468,13 +480,18 @@ class P2_Battlegrid
       allDestroyed_P2 +=1;
 
       //functionality to count which ship got clicked
-      for(let i=0; i<p1_battleships_array.length; i++)
+      for(let i=0; i<p2_battleships_array.length; i++)
       {
         for(let j=0; j<p2_battleships_array[i].shipGrids.length; j+=2)
         {
           if(this.grid_id_row == p2_battleships_array[i].shipGrids[j] && this.grid_id_col == p2_battleships_array[i].shipGrids[j+1])
           {
             ship_clickCounter_P2[i]++;
+            if(ship_clickCounter_P2[i] == _ship_sizes[i])
+            {
+              shipDestroyed = 2;
+              shipID_Destroyed = i;
+            }
           }
         }
       }
@@ -494,9 +511,10 @@ class P2_Battlegrid
 //class initialization for the ships - player 2
 class P2_Battleships
 {
-  constructor(_shipLength)
+  constructor(_shipLength, _shipType)
   {
     this.shipLength = _shipLength;
+    this.shipType = _shipType;
     this.shipGrids = [];
   }
 }
@@ -516,44 +534,27 @@ function p1_setupScreenTexts(_shipNumber, _ship_blockSize)
   switch(_shipNumber)
   {
     case 0: //destroyer
-      textSize(35);
-      textFont(gameFont_bold);
-      text("DESTROYER", width/1.4, height/1.235);
-
-      textSize(20);
-      textFont(gameFont_light);
       image(shipImage1, width/1.55, height/1.8, width/2.5, height/2.5);
-      text("SHIP NUMBER: "+(_shipNumber+1)+" / "+p1_battleships_array.length, width/1.85, height/1.28);
-      text("SHIP SIZE: "+_ship_blockSize+" Blocks", width/1.85, height/1.22)
       break;
 
     case 1: //cruiser
-      textSize(35);
-      textFont(gameFont_bold);
-      text("CRUISER", width/1.4, height/1.235);
-
-      textSize(20);
-      textFont(gameFont_light);
       image(shipImage2, width/1.55, height/1.95, width/2.25, height/2.25);
-      text("SHIP NUMBER: "+(_shipNumber+1)+" / "+p1_battleships_array.length, width/1.85, height/1.28);
-      text("SHIP SIZE: "+_ship_blockSize+" Blocks", width/1.855, height/1.22)
       break;
 
     case 2: //carrier
-      textSize(35);
-      textFont(gameFont_bold);
-      text("CARRIER", width/1.4, height/1.235);
-
-      textSize(20);
-      textFont(gameFont_light);
       image(shipImage3, width/1.45, height/1.85, width/2.2, height/2.2);
-      text("SHIP NUMBER: "+(_shipNumber+1)+" / "+p1_battleships_array.length, width/1.85, height/1.28);
-      text("SHIP SIZE: "+_ship_blockSize+" Blocks", width/1.855, height/1.22)
       break;
   }
 
-  textFont(gameFont_light);
+  textSize(35);
+  textFont(gameFont_bold);
+  text(p1_battleships_array[_shipNumber].shipType, width/1.4, height/1.235);
+
   textSize(20);
+  textFont(gameFont_light);
+  text("SHIP NUMBER: "+(_shipNumber+1)+" / "+p1_battleships_array.length, width/1.85, height/1.28);
+  text("SHIP SIZE: "+_ship_blockSize+" Blocks", width/1.85, height/1.22)
+
   text("Press [ R ] to rotate ship's orientation", width/4.2, height/1.14);
   text("Click [ LEFT MOUSE ] button to place the ship", width/4.2, height/1.09);
 }
@@ -570,65 +571,34 @@ function p2_setupScreenTexts(_shipNumber, _ship_blockSize)
   textSize(50);
   text("SETUP | PLAYER 2", width/2, height-(height/1.11));
 
-  switch(_shipNumber)
-  {
-    case 0: //destroyer
-      textSize(35);
-      textFont(gameFont_bold);
-      text("DESTROYER", width/4.255, height/1.235);
+  //flipping images horizontally
+  push();
+  scale(-1,1);
+    switch(_shipNumber)
+    {
+      case 0: //destroyer
+        image(shipImage1, -width/3.1, height/1.8, width/2.5, height/2.5);    
+        break;
 
-      textSize(20);
-      textFont(gameFont_light);
-      
-      //flipping image horizontally
-      push();
-      scale(-1,1);
-      image(shipImage1, -width/3.1, height/1.8, width/2.5, height/2.5);
-      pop();
-      
-      text("SHIP NUMBER: "+(_shipNumber+1)+" / "+p1_battleships_array.length, width/2.25, height/1.28);
-      text("SHIP SIZE: "+_ship_blockSize+" Blocks", width/2.25, height/1.22)
-      break;
+      case 1: //cruiser
+        image(shipImage2, -width/3.1, height/1.95, width/2.25, height/2.25);
+        break;
 
-    case 1: //cruiser
-      textSize(35);
-      textFont(gameFont_bold);
-      text("CRUISER", width/4.25, height/1.235);
+      case 2: //carrier      
+        image(shipImage3, -width/3.1, height/1.85, width/2.2, height/2.2);
+        break;
+    }
+  pop();
 
-      textSize(20);
-      textFont(gameFont_light);
+  textSize(35);
+  textFont(gameFont_bold);
+  text(p2_battleships_array[_shipNumber].shipType, width/4.255, height/1.235);
 
-      //flipping image horizontally
-      push();
-      scale(-1,1);
-      image(shipImage2, -width/3.1, height/1.95, width/2.25, height/2.25);
-      pop();
-
-      text("SHIP NUMBER: "+(_shipNumber+1)+" / "+p1_battleships_array.length, width/2.25, height/1.28);
-      text("SHIP SIZE: "+_ship_blockSize+" Blocks", width/2.25, height/1.22)
-      break;
-
-    case 2: //carrier
-      textSize(35);
-      textFont(gameFont_bold);
-      text("CARRIER", width/4.25, height/1.235);
-
-      textSize(20);
-      textFont(gameFont_light);
-
-      //flipping image horizontally
-      push();
-      scale(-1,1);
-      image(shipImage3, -width/3.1, height/1.85, width/2.2, height/2.2);
-      pop();
-
-      text("SHIP NUMBER: "+(_shipNumber+1)+" / "+p1_battleships_array.length, width/2.25, height/1.28);
-      text("SHIP SIZE: "+_ship_blockSize+" Blocks", width/2.25, height/1.22)
-      break;
-  }
-
-  textFont(gameFont_light);
   textSize(20);
+  textFont(gameFont_light);
+  text("SHIP NUMBER: "+(_shipNumber+1)+" / "+p1_battleships_array.length, width/2.25, height/1.28);
+  text("SHIP SIZE: "+_ship_blockSize+" Blocks", width/2.25, height/1.22)
+
   text("Press [ R ] to rotate ship's orientation", width/1.365, height/1.14);
   text("Click [ LEFT MOUSE ] button to place the ship", width/1.365, height/1.09);
 }
@@ -657,7 +627,7 @@ function setup()
   //instantiating each ship in their own class - player 1
   for(let i=0; i<ship_sizes.length; i++)
   {
-    let p1_shipObject = new P1_Battleships(ship_sizes[i]);
+    let p1_shipObject = new P1_Battleships(ship_sizes[i], ship_names[i]);
     p1_battleships_array.push(p1_shipObject);
   }
 
@@ -681,7 +651,7 @@ function setup()
   //instantiating each ship in their own class - player 2
   for(let i=0; i<ship_sizes.length; i++)
   {
-    let p2_shipObject = new P2_Battleships(ship_sizes[i]);
+    let p2_shipObject = new P2_Battleships(ship_sizes[i], ship_names[i]);
     p2_battleships_array.push(p2_shipObject);
   }
 }
@@ -913,10 +883,16 @@ function draw()
           p2_battlegrid_array[gridRow][gridColumn].gameplay_gridHover();
           if(mouseButton == LEFT && mouseIsPressed == true && p2_battlegrid_array[gridRow][gridColumn].grid_hoverFlag == 1)
           {
-            p2_battlegrid_array[gridRow][gridColumn].gameplay_gridClicked();
+            p2_battlegrid_array[gridRow][gridColumn].gameplay_gridClicked(ship_sizes);
             activeSide = 'L';
             mouseIsPressed = false;
           }
+        }
+        //resetting grid colors for player 2 matrix just during the first round
+        else if(activeSide == 'L' && oneLoop == 0)
+        {
+          p2_battlegrid_array[gridRow][gridColumn].grid_fillColor = color(0,0,25,150);
+          p2_battlegrid_array[gridRow][gridColumn].grid_strokeColor = color(150);
         }
       }
     }
@@ -936,12 +912,12 @@ function draw()
           p1_battlegrid_array[gridRow][gridColumn].gameplay_gridHover();
           if(mouseButton == LEFT && mouseIsPressed == true && p1_battlegrid_array[gridRow][gridColumn].grid_hoverFlag == 1)
           {
-            p1_battlegrid_array[gridRow][gridColumn].gameplay_gridClicked();
+            p1_battlegrid_array[gridRow][gridColumn].gameplay_gridClicked(ship_sizes);
             activeSide = 'R';
             mouseIsPressed = false;
           }
         }
-        //resetting grid colors for player 2 matrix just during the first round
+        //resetting grid colors for player 1 matrix just during the first round
         else if(activeSide == 'R' && oneLoop == 0)
         {
           p1_battlegrid_array[gridRow][gridColumn].grid_fillColor = color(0,0,25,150);
@@ -976,21 +952,47 @@ function draw()
       rect(width/2, 0, width/2, height);
     }
 
-    //code snippet to check whether all ships destroyed for a player
+    //code snippet for displaying which ship destroyed for each player
+    if(shipDestroyed !=0)
+    {
+      fill(255);
+      noStroke();
+
+      textAlign(CENTER,CENTER);
+      textSize(20);
+      textFont(gameFont_bold);      
+      text("[ A PLAYER "+(shipDestroyed)+" SHIP HAS BEEN DESTROYED ]", width/2.1, height/1.1);
+      textFont(gameFont_light);
+      text(p1_battleships_array[shipID_Destroyed].shipType +" - "+p1_battleships_array[shipID_Destroyed].shipLength+" Blocks", width/2.1, height/1.06);
+    }
+
+    //code snippet to check whether all ships destroyed for a player & announce winner
     if(allDestroyed_P1 == total_shipGrids || allDestroyed_P2 == total_shipGrids)
     {
+      //removes the "active player" overlays
       activeSide = 'X';
 
-      fill(0,0,0,150);
+      fill(0,0,0,175);
       noStroke();
       rectMode(CENTER);
       rect(width/2, height/2, width, height);
 
       textAlign(CENTER,CENTER);
       textFont(gameFont_bold);
-      textSize(60);
+      textSize(75);
       fill(255);
-      text("GAME OVER", width/2, height/2);
+      text("GAME OVER", width/2.05, height/2.35);
+      textFont(gameFont_light);
+      textSize(30);
+
+      if(shipDestroyed == 1)
+      {
+        text("Congratulations Player 2 !", width/2.05, height/1.95);
+      }
+      else if(shipDestroyed == 2)
+      {
+        text("Congratulations Player 1 !", width/2.05, height/1.95);
+      }
     }
   }
 }
