@@ -6,7 +6,7 @@ let p2_shipNumber = 0;
 let rotateFlag = 0;
 let oneLoop = 0;
 
-let activeSide = 'L';
+let activeSide = 'R';
 let allDestroyed_P1 = 0;
 let allDestroyed_P2 = 0;
 let total_shipGrids = 0;
@@ -18,6 +18,7 @@ let shipID_Destroyed = 0;
 let backgroundImage;
 let shipImage1, shipImage2, shipImage3;
 let gameFont_bold, gameFont_light;
+let bgm_setup, bgm_gameplay;
 
 //arrays for class objects for each player
 let p1_battlegrid_array = [];
@@ -26,7 +27,7 @@ let p2_battlegrid_array = [];
 let p2_battleships_array = [];
 
 //array containing block sizes of all battleships
-let ship_sizes = [2,3,3,4];
+let ship_sizes = [2,3,4];
 let ship_names = ["DESTROYER", "CRUISER", "CARRIER"];
 let ship_clickCounter_P1 = [0,0,0];
 let ship_clickCounter_P2 = [0,0,0];
@@ -40,6 +41,9 @@ function preload()
 
   gameFont_bold = loadFont("./ChakraPetch-Bold.ttf");
   gameFont_light = loadFont("./ChakraPetch-Light.ttf");
+
+  bgm_setup = loadSound("./SetupScoreX.mp3");
+  bgm_gameplay = loadSound("./GameplayScore.mp3");
 }
 
 //class initialization for the game board - player 1
@@ -994,5 +998,19 @@ function draw()
         text("Congratulations Player 1 !", width/2.05, height/1.95);
       }
     }
+  }
+}
+
+//TEST FUNCTION FOR THE MOMENT
+function keyPressed()
+{
+  if(keyCode == 32 && gameFlag !=3)
+  {
+    bgm_setup.play();
+  }
+  else if(gameFlag == 3)
+  {
+    bgm_setup.stop();
+    bgm_gameplay.play();
   }
 }
