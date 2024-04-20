@@ -1,6 +1,12 @@
+//initializing arduino-serial variables
+let serialConnect;
+let connectButton;
+let readyToReceive;
+let arduinoLetterValue;
+
 //set game board dimensions & gameplay-related flags
 let grid_dimension = 7;
-let gameFlag = 1;
+let gameFlag = 0;
 let p1_shipNumber = 0;
 let p2_shipNumber = 0;
 let rotateFlag = 0;
@@ -35,6 +41,7 @@ let ship_clickCounter_P2 = [0,0,0];
 function preload()
 {
   backgroundImage = loadImage("./Waves.jpg");
+  homeImage = loadImage("./HomeScreen.png");
   shipImage1 = loadImage("./Ship_Destroyer.png");
   shipImage2 = loadImage("./Ship_Cruiser.png");
   shipImage3 = loadImage("./Ship_Carrier.png");
@@ -42,8 +49,42 @@ function preload()
   gameFont_bold = loadFont("./ChakraPetch-Bold.ttf");
   gameFont_light = loadFont("./ChakraPetch-Light.ttf");
 
-  bgm_setup = loadSound("./SetupScoreX.mp3");
+  bgm_setup = loadSound("./SetupScore.mp3");
   bgm_gameplay = loadSound("./GameplayScore.mp3");
+}
+
+//function for serial connection with arduino
+function receiveSerial()
+{
+  let line = serialConnect.readUntil("\n");
+  trim(line);
+  if(!line) return;
+
+  if(line.CharAt(0) != "{")
+  {
+    print("error: ",line);
+    readyToReceive = true;
+    return;
+  }
+
+  let data = JSON.parse(line).data;
+  readyToReceive = true;
+}
+
+//function to open serial connection with arduino
+function connectToSerial()
+{
+  if(!serialConnect.open(115200))
+  {
+    serialConnect.open(115200);
+    readyToReceive = true;
+    connectButton.hide();
+    gameFlag = 1;
+
+    //starting background music for setup screens
+    bgm_setup.playMode('untilDone');
+    bgm_setup.play();
+  }
 }
 
 //class initialization for the game board - player 1
@@ -610,6 +651,17 @@ function p2_setupScreenTexts(_shipNumber, _ship_blockSize)
 function setup()
 {
   createCanvas(windowWidth, windowHeight);
+  background(homeImage);
+  
+  //code snippet to create arduino-serial connection button
+  readyToReceive = false;
+  serialConnect = createSerial();
+  connectButton = createButton("INITIATE GAME");
+  connectButton.position(width/2,height/2);
+  connectButton.style("width", width/12+"px");
+  connectButton.style("height", height/12+"px");
+  connectButton.style("border-radius", "5px");
+  connectButton.mouseClicked(connectToSerial);
 
   //instantiating matrix (game board) - player 1
   let p1_init_gridPosY = int(height/3.75);
@@ -662,12 +714,30 @@ function setup()
 
 function draw()
 {
-  imageMode(CORNER);
-  background(backgroundImage);
+  print(arduinoLetterValue);
+  if(gameFlag > 0)
+  {
+    imageMode(CORNER);
+    background(backgroundImage);
+  }
+
+  //sending data to arduino
+  if(serialConnect.opened() && readyToReceive)
+  {
+    serialConnect.clear();
+    serialConnect.write(arduinoLetterValue);
+  }
+
+  if(serialConnect.availableBytes()>0)
+  {
+    receiveSerial();
+  }
 
   // --- PLAYER 1 SETUP SCREEN --- //
   if(gameFlag == 1)
   {
+    arduinoLetterValue = 'A';
+
     //drawing the matrix (game board)
     for(let gridRow=0; gridRow<grid_dimension; gridRow++)
     {
@@ -753,6 +823,8 @@ function draw()
 
   else if(gameFlag == 2)
   {
+    arduinoLetterValue = 'B';
+
     //drawing the matrix (game board)
     for(let gridRow=0; gridRow<grid_dimension; gridRow++)
     {
@@ -826,6 +898,12 @@ function draw()
           if(keyCode == ENTER && keyIsPressed == true)
           {
             gameFlag = 3;
+
+            //changing background music
+            bgm_setup.stop();
+            bgm_gameplay.playMode('untilDone');
+            // bgm_gameplay.play();
+
             keyIsPressed = false;
             break;
           }
@@ -959,7 +1037,14 @@ function draw()
     //code snippet for displaying which ship destroyed for each player
     if(shipDestroyed !=0)
     {
-      fill(255);
+      if(shipDestroyed == 1)
+      {
+        fill(255,100,100);
+      }
+      else if(shipDestroyed == 2)
+      {
+        fill(100,255,100);
+      }
       noStroke();
 
       textAlign(CENTER,CENTER);
@@ -975,6 +1060,7 @@ function draw()
     {
       //removes the "active player" overlays
       activeSide = 'X';
+      bgm_gameplay.stop();
 
       fill(0,0,0,175);
       noStroke();
@@ -991,26 +1077,12 @@ function draw()
 
       if(shipDestroyed == 1)
       {
-        text("Congratulations Player 2 !", width/2.05, height/1.95);
+        text("Congratulations, Player 2 !", width/2.05, height/1.95);
       }
       else if(shipDestroyed == 2)
       {
-        text("Congratulations Player 1 !", width/2.05, height/1.95);
+        text("Congratulations, Player 1 !", width/2.05, height/1.95);
       }
     }
-  }
-}
-
-//TEST FUNCTION FOR THE MOMENT
-function keyPressed()
-{
-  if(keyCode == 32 && gameFlag !=3)
-  {
-    bgm_setup.play();
-  }
-  else if(gameFlag == 3)
-  {
-    bgm_setup.stop();
-    bgm_gameplay.play();
   }
 }
