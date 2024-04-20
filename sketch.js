@@ -2,7 +2,10 @@
 let serialConnect;
 let connectButton;
 let readyToReceive;
-let arduinoLetterValue;
+let arduinoLetterValue = 'X';
+
+let arduinoTimer = 500;
+let eventChange = 0;
 
 //set game board dimensions & gameplay-related flags
 let grid_dimension = 7;
@@ -49,7 +52,7 @@ function preload()
   gameFont_bold = loadFont("./ChakraPetch-Bold.ttf");
   gameFont_light = loadFont("./ChakraPetch-Light.ttf");
 
-  bgm_setup = loadSound("./SetupScore.mp3");
+  bgm_setup = loadSound("./SetupScoreX.mp3");
   bgm_gameplay = loadSound("./GameplayScore.mp3");
 }
 
@@ -74,9 +77,9 @@ function receiveSerial()
 //function to open serial connection with arduino
 function connectToSerial()
 {
-  if(!serialConnect.open(115200))
+  if(!serialConnect.open(9600))
   {
-    serialConnect.open(115200);
+    serialConnect.open(9600);
     readyToReceive = true;
     connectButton.hide();
     gameFlag = 1;
@@ -522,6 +525,7 @@ class P2_Battlegrid
     if(this.grid_occupiedFlag == 1)
     {
       this.grid_fillColor = color(255,0,0,150);
+      arduinoLetterValue = 'D';
       allDestroyed_P2 +=1;
 
       //functionality to count which ship got clicked
@@ -544,6 +548,7 @@ class P2_Battlegrid
     else
     {
       this.grid_fillColor = color(0,255,0,150);
+      arduinoLetterValue = 'C';
     }
   }
   //
@@ -651,7 +656,7 @@ function p2_setupScreenTexts(_shipNumber, _ship_blockSize)
 function setup()
 {
   createCanvas(windowWidth, windowHeight);
-  background(homeImage);
+  background(homeImage);  
   
   //code snippet to create arduino-serial connection button
   readyToReceive = false;
@@ -714,7 +719,6 @@ function setup()
 
 function draw()
 {
-  print(arduinoLetterValue);
   if(gameFlag > 0)
   {
     imageMode(CORNER);
@@ -725,6 +729,45 @@ function draw()
   if(serialConnect.opened() && readyToReceive)
   {
     serialConnect.clear();
+
+    if(gameFlag == 1)
+    {
+      if(millis()>eventChange)
+      {
+        eventChange = millis()+arduinoTimer;
+        if(floor(eventChange/1000) % 2 == 0)
+        {
+          arduinoLetterValue = 'A';
+        }
+        else
+        {
+          arduinoLetterValue = 'B';
+        }
+      }
+    }
+    else if(gameFlag == 3)
+    {     
+      if(shipDestroyed == 2)
+      {
+        if(millis()>eventChange)
+        {
+          eventChange = millis()+arduinoTimer;
+          if(floor(eventChange/1000) % 2 == 0)
+          {
+            arduinoLetterValue = 'X';
+          }
+          else
+          {
+            arduinoLetterValue = 'D';
+          }
+        }
+      }
+    }
+    else
+    {
+      arduinoLetterValue = 'X';
+    }
+    
     serialConnect.write(arduinoLetterValue);
   }
 
@@ -736,8 +779,6 @@ function draw()
   // --- PLAYER 1 SETUP SCREEN --- //
   if(gameFlag == 1)
   {
-    arduinoLetterValue = 'A';
-
     //drawing the matrix (game board)
     for(let gridRow=0; gridRow<grid_dimension; gridRow++)
     {
@@ -823,8 +864,6 @@ function draw()
 
   else if(gameFlag == 2)
   {
-    arduinoLetterValue = 'B';
-
     //drawing the matrix (game board)
     for(let gridRow=0; gridRow<grid_dimension; gridRow++)
     {
@@ -902,8 +941,9 @@ function draw()
             //changing background music
             bgm_setup.stop();
             bgm_gameplay.playMode('untilDone');
-            // bgm_gameplay.play();
+            bgm_gameplay.play();
 
+            arduinoLetterValue = 'X';
             keyIsPressed = false;
             break;
           }
@@ -916,44 +956,7 @@ function draw()
 
   else if(gameFlag == 3)
   {
-    fill(255);
-    noStroke();
-    textAlign(CENTER,CENTER);
-    textFont(gameFont_bold);
-    textSize(60);
-
-    // MANUAL ENTRY FOR TESTING PURPOSES ONLY..
-    // p1_battlegrid_array[0][0].grid_occupiedFlag = 1;
-    // p1_battlegrid_array[0][1].grid_occupiedFlag = 1;
-    // p1_battlegrid_array[1][0].grid_occupiedFlag = 1;
-    // p1_battlegrid_array[1][1].grid_occupiedFlag = 1;
-    // p1_battlegrid_array[1][2].grid_occupiedFlag = 1;
-    // p1_battlegrid_array[2][0].grid_occupiedFlag = 1;
-    // p1_battlegrid_array[2][1].grid_occupiedFlag = 1;
-    // p1_battlegrid_array[2][2].grid_occupiedFlag = 1;
-    // p1_battlegrid_array[2][3].grid_occupiedFlag = 1;
-
-    // p1_battleships_array[0].shipGrids = [0,0,0,1];
-    // p1_battleships_array[1].shipGrids = [1,0,1,1,1,2];
-    // p1_battleships_array[2].shipGrids = [2,0,2,1,2,2,2,3];
-
-    // p2_battlegrid_array[4][5].grid_occupiedFlag = 1;
-    // p2_battlegrid_array[4][6].grid_occupiedFlag = 1;
-    // p2_battlegrid_array[5][4].grid_occupiedFlag = 1;
-    // p2_battlegrid_array[5][5].grid_occupiedFlag = 1;
-    // p2_battlegrid_array[5][6].grid_occupiedFlag = 1;
-    // p2_battlegrid_array[6][3].grid_occupiedFlag = 1;
-    // p2_battlegrid_array[6][4].grid_occupiedFlag = 1;
-    // p2_battlegrid_array[6][5].grid_occupiedFlag = 1;
-    // p2_battlegrid_array[6][6].grid_occupiedFlag = 1;
-
-    // p2_battleships_array[0].shipGrids = [4,5,4,6];
-    // p2_battleships_array[1].shipGrids = [5,4,5,5,5,6];
-    // p2_battleships_array[2].shipGrids = [6,3,6,4,6,5,6,6];
-    // ACTUAL CODE FROM BELOW..
-
     // PLAYER 1 INTERFACE //
-    text("PLAYER 1", width/1.365, height-(height/1.15));
     for(let gridRow=0; gridRow<grid_dimension; gridRow++)
     {
       for(let gridColumn=0; gridColumn<grid_dimension; gridColumn++)
@@ -980,9 +983,6 @@ function draw()
     }
 
     // PLAYER 2 INTERFACE //
-    fill(255);
-    noStroke();
-    text("PLAYER 2", width/4.165, height-(height/1.15)); 
     for(let gridRow=0; gridRow<grid_dimension; gridRow++)
     {
       for(let gridColumn=0; gridColumn<grid_dimension; gridColumn++)
@@ -1021,17 +1021,29 @@ function draw()
     //variable to run loops only for one round
     oneLoop = 1;
 
-    //black overlay depending on which side is active
-    fill(0,175);
+    //black overlay & text depending on which side is active
     noStroke(); 
     rectMode(CORNER);
+
+    textAlign(CENTER,CENTER);
+    textFont(gameFont_bold);
+    textSize(75);
+
     if(activeSide == 'R')
     {
+      fill(0,225);
       rect(0, 0, width/2, height);
+
+      fill(255);
+      text("PLAYER 1", width/4, height/2);
     }
     else if(activeSide == 'L')
     {
+      fill(0,225);
       rect(width/2, 0, width/2, height);
+
+      fill(255);
+      text("PLAYER 2", width/1.35, height/2);
     }
 
     //code snippet for displaying which ship destroyed for each player

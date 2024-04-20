@@ -12,7 +12,7 @@ void sendData()
 
 void setup()
 {
-  Serial.begin(115200);
+  Serial.begin(9600);
   while(!Serial)
   {
     //empty
@@ -34,27 +34,51 @@ void loop()
   if(Serial.available()>0)
   {
     int byteIn = Serial.read();
-    if(byteIn == 'A')
+    
+    if(byteIn == 'A') //BLUE - PLAYER 1
+    {
+      Serial.flush();
+
+      digitalWrite(2,HIGH);
+      digitalWrite(3,LOW);
+      digitalWrite(4,LOW);
+      digitalWrite(5,LOW);
+    }
+    else if(byteIn == 'B') //WHITE - PLAYER 1
+    {
+      Serial.flush();
+
+      digitalWrite(2,LOW);
+      digitalWrite(3,HIGH);
+      digitalWrite(4,LOW);
+      digitalWrite(5,LOW);
+    }
+    else if(byteIn == 'C') //BLUE & WHITE - PLAYER 1
     {
       Serial.flush();
 
       digitalWrite(2,HIGH);
       digitalWrite(3,HIGH);
-      delay(500);
-      digitalWrite(2,LOW);
-      digitalWrite(3,HIGH);
-      delay(500);
+      digitalWrite(4,LOW);
+      digitalWrite(5,LOW);
     }
-    else if(byteIn == 'B')
+    else if(byteIn == 'D') //RED & ORANGE - PLAYER 1
     {
       Serial.flush();
 
+      digitalWrite(2,LOW);
+      digitalWrite(3,LOW);
       digitalWrite(4,HIGH);
       digitalWrite(5,HIGH);
-      delay(500);
+    }
+    else //ALL LIGHTS OFF - PLAYER 1
+    {
+      Serial.flush();
+      
+      digitalWrite(2,LOW);
+      digitalWrite(3,LOW);
       digitalWrite(4,LOW);
       digitalWrite(5,LOW);
-      delay(500);
     }
   }
 }
