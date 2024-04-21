@@ -2,7 +2,7 @@
 let serialConnect;
 let connectButton;
 let readyToReceive;
-let arduinoLetterValue = 'X';
+let arduinoLetterValue;
 
 let arduinoTimer = 500;
 let eventChange = 0;
@@ -52,7 +52,7 @@ function preload()
   gameFont_bold = loadFont("./ChakraPetch-Bold.ttf");
   gameFont_light = loadFont("./ChakraPetch-Light.ttf");
 
-  bgm_setup = loadSound("./SetupScoreX.mp3");
+  bgm_setup = loadSound("./SetupScore.mp3");
   bgm_gameplay = loadSound("./GameplayScore.mp3");
 }
 
@@ -86,7 +86,7 @@ function connectToSerial()
 
     //starting background music for setup screens
     bgm_setup.playMode('untilDone');
-    bgm_setup.play();
+    bgm_setup.loop();
   }
 }
 
@@ -291,6 +291,9 @@ class P1_Battlegrid
       this.grid_fillColor = color(255,0,0,150);
       allDestroyed_P1 +=1;
       
+      //light up red & orange leds for player 2 interface during gameplay
+      arduinoLetterValue = 'S';
+
       //functionality to count which ship got clicked
       for(let i=0; i<p1_battleships_array.length; i++)
       {
@@ -311,6 +314,9 @@ class P1_Battlegrid
     else
     {
       this.grid_fillColor = color(0,255,0,150);
+
+      //light up blue & white leds for player 2 interface during gameplay
+      arduinoLetterValue = 'R';
     }
   }
 }
@@ -525,8 +531,10 @@ class P2_Battlegrid
     if(this.grid_occupiedFlag == 1)
     {
       this.grid_fillColor = color(255,0,0,150);
-      arduinoLetterValue = 'D';
       allDestroyed_P2 +=1;
+
+      //light up red & orange leds for player 1 interface during gameplay
+      arduinoLetterValue = 'D';
 
       //functionality to count which ship got clicked
       for(let i=0; i<p2_battleships_array.length; i++)
@@ -548,6 +556,8 @@ class P2_Battlegrid
     else
     {
       this.grid_fillColor = color(0,255,0,150);
+      
+      //light up blue & white leds for player 1 interface during gameplay
       arduinoLetterValue = 'C';
     }
   }
@@ -656,8 +666,8 @@ function p2_setupScreenTexts(_shipNumber, _ship_blockSize)
 function setup()
 {
   createCanvas(windowWidth, windowHeight);
-  background(homeImage);  
-  
+  background(homeImage);
+
   //code snippet to create arduino-serial connection button
   readyToReceive = false;
   serialConnect = createSerial();
@@ -730,24 +740,70 @@ function draw()
   {
     serialConnect.clear();
 
+    //sending data during ship setup - player 1
     if(gameFlag == 1)
     {
+      //turning off all leds for player 2 board
+      serialConnect.write('Y');
+
+      //alternating blue & white - player 1
       if(millis()>eventChange)
       {
         eventChange = millis()+arduinoTimer;
         if(floor(eventChange/1000) % 2 == 0)
         {
+          //turn on blue leds - player 1
           arduinoLetterValue = 'A';
         }
         else
         {
+          //turn on white leds - player 1
           arduinoLetterValue = 'B';
         }
       }
     }
+    //sending data during ship setup - player 2
+    else if(gameFlag == 2)
+    {
+      //turning off all leds for player 1 board
+      serialConnect.write('X');
+
+      //alternating blue & white - player 2
+      if(millis()>eventChange)
+      {
+        eventChange = millis()+arduinoTimer;
+        if(floor(eventChange/1000) % 2 == 0)
+        {
+          //turn on blue leds - player 2
+          arduinoLetterValue = 'P';
+        }
+        else
+        {
+          //turn on white leds - player 2
+          arduinoLetterValue = 'Q';
+        }
+      }
+    }
     else if(gameFlag == 3)
-    {     
-      if(shipDestroyed == 2)
+    {
+      //when player 2 interface is active: blink leds when full ship destroyed
+      if(shipDestroyed == 1)
+      {
+        if(millis()>eventChange)
+        {
+          eventChange = millis()+arduinoTimer;
+          if(floor(eventChange/1000) % 2 == 0)
+          {
+            arduinoLetterValue = 'Y';
+          }
+          else
+          {
+            arduinoLetterValue = 'S';
+          }
+        }
+      }
+      //when player 1 interface is active: blink leds when full ship destroyed
+      else if(shipDestroyed == 2)
       {
         if(millis()>eventChange)
         {
@@ -763,11 +819,7 @@ function draw()
         }
       }
     }
-    else
-    {
-      arduinoLetterValue = 'X';
-    }
-    
+        
     serialConnect.write(arduinoLetterValue);
   }
 
@@ -941,9 +993,9 @@ function draw()
             //changing background music
             bgm_setup.stop();
             bgm_gameplay.playMode('untilDone');
-            bgm_gameplay.play();
+            bgm_gameplay.loop();
 
-            arduinoLetterValue = 'X';
+            arduinoLetterValue = 'Y';
             keyIsPressed = false;
             break;
           }
@@ -1022,7 +1074,7 @@ function draw()
     oneLoop = 1;
 
     //black overlay & text depending on which side is active
-    noStroke(); 
+    noStroke();
     rectMode(CORNER);
 
     textAlign(CENTER,CENTER);
@@ -1070,7 +1122,7 @@ function draw()
     //code snippet to check whether all ships destroyed for a player & announce winner
     if(allDestroyed_P1 == total_shipGrids || allDestroyed_P2 == total_shipGrids)
     {
-      //removes the "active player" overlays
+      //removes the "active player" overlay
       activeSide = 'X';
       bgm_gameplay.stop();
 
@@ -1090,10 +1142,12 @@ function draw()
       if(shipDestroyed == 1)
       {
         text("Congratulations, Player 2 !", width/2.05, height/1.95);
+        arduinoLetterValue = 'X';
       }
       else if(shipDestroyed == 2)
       {
         text("Congratulations, Player 1 !", width/2.05, height/1.95);
+        arduinoLetterValue = 'Y';
       }
     }
   }
