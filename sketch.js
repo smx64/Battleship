@@ -28,6 +28,7 @@ let backgroundImage;
 let shipImage1, shipImage2, shipImage3;
 let gameFont_bold, gameFont_light;
 let bgm_setup, bgm_gameplay;
+let explosionSound, splashSound;
 
 //arrays for class objects for each player
 let p1_battlegrid_array = [];
@@ -54,6 +55,8 @@ function preload()
 
   bgm_setup = loadSound("./SetupScore.mp3");
   bgm_gameplay = loadSound("./GameplayScore.mp3");
+  explosionSound = loadSound("./Explosion.mp3");
+  splashSound = loadSound("./WaterSplash.wav");
 }
 
 //function for serial connection with arduino
@@ -294,6 +297,9 @@ class P1_Battlegrid
       //light up red & orange leds for player 2 interface during gameplay
       arduinoLetterValue = 'S';
 
+      explosionSound.playMode('restart');
+      explosionSound.play();
+
       //functionality to count which ship got clicked
       for(let i=0; i<p1_battleships_array.length; i++)
       {
@@ -317,6 +323,9 @@ class P1_Battlegrid
 
       //light up blue & white leds for player 2 interface during gameplay
       arduinoLetterValue = 'R';
+
+      splashSound.playMode('restart');
+      splashSound.play();
     }
   }
 }
@@ -536,6 +545,9 @@ class P2_Battlegrid
       //light up red & orange leds for player 1 interface during gameplay
       arduinoLetterValue = 'D';
 
+      explosionSound.playMode('restart');
+      explosionSound.play();
+
       //functionality to count which ship got clicked
       for(let i=0; i<p2_battleships_array.length; i++)
       {
@@ -559,6 +571,9 @@ class P2_Battlegrid
       
       //light up blue & white leds for player 1 interface during gameplay
       arduinoLetterValue = 'C';
+
+      splashSound.playMode('restart');
+      splashSound.play();
     }
   }
   //
