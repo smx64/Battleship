@@ -668,14 +668,31 @@ function setup()
   createCanvas(windowWidth, windowHeight);
   background(homeImage);
 
+  //homescreen text
+  fill(0,70);
+  rectMode(CORNER);
+  rect(0,0,width,height);
+
+  fill(255);
+  noStroke();
+  textAlign(CENTER,CENTER);
+  textFont(gameFont_bold);
+  textSize(65);
+  text("BATTLESHIP", width/2, height/4.5);
+
+  textFont(gameFont_light);
+  textSize(15);
+  text("SHASHWAT MISHRA | 2024", width/1.08, height/1.03);
+
   //code snippet to create arduino-serial connection button
   readyToReceive = false;
   serialConnect = createSerial();
   connectButton = createButton("INITIATE GAME");
-  connectButton.position(width/2,height/2);
-  connectButton.style("width", width/12+"px");
-  connectButton.style("height", height/12+"px");
+  connectButton.position(width/2.65,height/3.6);
+  connectButton.style("width", width/4+"px");
+  connectButton.style("height", height/25+"px");
   connectButton.style("border-radius", "5px");
+  connectButton.id("btn");
   connectButton.mouseClicked(connectToSerial);
 
   //instantiating matrix (game board) - player 1
@@ -829,6 +846,7 @@ function draw()
   }
 
   // --- PLAYER 1 SETUP SCREEN --- //
+
   if(gameFlag == 1)
   {
     //drawing the matrix (game board)
