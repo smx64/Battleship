@@ -22,6 +22,7 @@ let total_shipGrids = 0;
 
 let shipDestroyed = 0;
 let shipID_Destroyed = 0;
+let shipRemain_P1, shipRemain_P2;
 
 //initializing aesthetic asset variables
 let backgroundImage;
@@ -291,7 +292,7 @@ class P1_Battlegrid
 
     if(this.grid_occupiedFlag == 1)
     {
-      this.grid_fillColor = color(255,0,0,150);
+      this.grid_fillColor = color(255,0,0,200);
       allDestroyed_P1 +=1;
       
       //light up red & orange leds for player 2 interface during gameplay
@@ -312,6 +313,7 @@ class P1_Battlegrid
             {
               shipDestroyed = 1;
               shipID_Destroyed = i;
+              shipRemain_P2--;
             }
           }
         }
@@ -319,7 +321,7 @@ class P1_Battlegrid
     }
     else
     {
-      this.grid_fillColor = color(0,255,0,150);
+      this.grid_fillColor = color(0,255,0,215);
 
       //light up blue & white leds for player 2 interface during gameplay
       arduinoLetterValue = 'R';
@@ -539,7 +541,7 @@ class P2_Battlegrid
 
     if(this.grid_occupiedFlag == 1)
     {
-      this.grid_fillColor = color(255,0,0,150);
+      this.grid_fillColor = color(255,0,0,200);
       allDestroyed_P2 +=1;
 
       //light up red & orange leds for player 1 interface during gameplay
@@ -560,6 +562,7 @@ class P2_Battlegrid
             {
               shipDestroyed = 2;
               shipID_Destroyed = i;
+              shipRemain_P1--;
             }
           }
         }
@@ -567,7 +570,7 @@ class P2_Battlegrid
     }
     else
     {
-      this.grid_fillColor = color(0,255,0,150);
+      this.grid_fillColor = color(0,255,0,215);
       
       //light up blue & white leds for player 1 interface during gameplay
       arduinoLetterValue = 'C';
@@ -682,6 +685,9 @@ function setup()
 {
   createCanvas(windowWidth, windowHeight);
   background(homeImage);
+
+  shipRemain_P1 = ship_sizes.length;
+  shipRemain_P2 = ship_sizes.length;
 
   //homescreen text
   fill(0,70);
@@ -1027,6 +1033,7 @@ function draw()
             bgm_setup.stop();
             bgm_gameplay.playMode('untilDone');
             bgm_gameplay.loop();
+            bgm_gameplay.setVolume(0.3);
 
             arduinoLetterValue = 'Y';
             keyIsPressed = false;
@@ -1106,6 +1113,15 @@ function draw()
     //variable to run loops only for one round
     oneLoop = 1;
 
+    //code snippet to display enemy ship counts
+    noStroke();
+    fill(255);
+    textAlign(CENTER,CENTER);
+    textFont(gameFont_bold);
+    textSize(20);
+    text("ENEMY SHIPS LEFT: "+shipRemain_P1, width/4.2, height/1.15);
+    text("ENEMY SHIPS LEFT: "+shipRemain_P2, width/1.35, height/1.15);
+
     //black overlay & text depending on which side is active
     noStroke();
     rectMode(CORNER);
@@ -1159,7 +1175,7 @@ function draw()
       activeSide = 'X';
       bgm_gameplay.stop();
 
-      fill(0,0,0,175);
+      fill(0,0,0,125);
       noStroke();
       rectMode(CENTER);
       rect(width/2, height/2, width, height);
