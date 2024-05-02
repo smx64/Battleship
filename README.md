@@ -200,10 +200,48 @@ The game continues until a player destroys *all* the ships of the other player. 
 
 ### ▶️▶️ **BATTLESHIP: SONIC ELEMENTS**
 
-In order to make the game feel more immersive and interesting, I've included background scores throughout the entirety of the game. An ominous pulsating piece of music plays repeatedly during the player setup screens, signalling "peace before the storm" and foreboding the onset of all-out warfare.
+In order to make the game more interesting, I've included background scores throughout the entirety of the game. An ominous pulsating piece of music plays repeatedly during the player setup screens, signalling "peace before the storm" and foreboding the onset of all-out warfare.
 
 The music switches gears and becomes fast-paced & exhilerating during actual gameplay to infuse that competitive spirit among the players. It only comes to a stop when the game finishes, and the winner is announced.
 
 In addition to the background scores, I've coded in scenario-specific sound effects as well. During gameplay, if on mouse-click, the player hits a part of a ship, an explosion sound is played signifying the action. If the player misses, a water splash sound is cued for effect.
 
 ### ▶️▶️ **BATTLESHIP: AMBIENT LIGHTING & PHYSICAL COMPUTING**
+
+In addition to all the gameplay elements and the sound effects, I've also incorporated a physical computing aspect to my game via Arduino. This enables real-time ambient or environment lighting that makes the whole gameplay experience feel more immersive. I've coded in "triggers" that send in signals to Arduino, which controls the lighting to modifying the LED states.
+
+I've made use of white, blue, red, and orange LEDs to mimic certain situations in-game. Blue & white LEDs light up to simulate water reflections, or red & orange LEDs light up to mimic ship explosions.
+
+I'm using a total of 32 LEDs i.e. 16 for each player. During the player setup screens, LEDs alternate between blue & white colors. I'm utilizing two breadboards connected to a single Arduino ESP32 controller. The left breadboard lighting corresponds to Player 1, whereas the lighting on the right breadboard is for Player 2.
+
+<p align = "center">
+  <img src = "./Images/Ambient_Setup_P1.jpg">
+  <br>
+  Figure 2.13: Ambient Lighting - Player 1 Setup Screen
+  <br>
+  <br>
+  <img src = "./Images/Ambient_Setup_P2.jpg">
+  <br>
+  Figure 2.14: Ambient Lighting - Player 2 Setup Screen
+</p>
+
+The LED action during the actual gameplay is different. Here, whenever a player clicks on a square, if that square had a ship-part or not, influences the LED colors. If the square turns red, the LEDs also glow red & orange mimicking an explosion. If the square turns green, the LEDs glow white & blue, mimicking water splashes and reflections. If a player destroys a ship completely, the red & orange LEDs start blinking, providing a visual confirmation of the feat, in addition to the on-screen notification.
+
+<p align = "center">
+  <img src = "./Images/Ambient_Gameplay_SquareMissed.jpg">
+  <br>
+  Figure 2.15: Ambient Lighting - Water Reflection Simulation During Miss
+  <br>
+  <br>
+  <img src = "./Images/Ambient_Gameplay_SquareHit.jpg">
+  <br>
+  Figure 2.16: Ambient Lighting - Explosion Simulation During Hit
+</p>
+
+These lighting effects continue until the game finishes. Once the game ends, the LEDs on the breadboard flash for the winning player, while the other player's LEDs go dark.
+
+<p align = "center">
+  <img src = "./Images/Ambient_Winner.jpg">
+  <br>
+  Figure 2.17: Ambient Lighting - Winner Announcement
+</p>
