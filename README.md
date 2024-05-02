@@ -12,7 +12,7 @@ I've developed a web-based version of this game using web technologies like Java
 
 ## PART 1: THE IDEATION PROCESS
 
-▶️▶️ **GAME INTERFACE & CODE**
+### ▶️▶️ **GAME INTERFACE & CODE**
 
 The game would start off with the first player plotting the positions of their battleships in a 9 x 9 square matrix. Once they’re done, the second player repeats the same process.
 
@@ -50,7 +50,7 @@ Once the players have set their ships, the game would begin. Both players would 
 
 Whichever player destroys all the ships of the other player first, wins the game.
 
-▶️▶️ **VISUAL & SONIC IMMERSION**
+### ▶️▶️ **VISUAL & SONIC IMMERSION**
 
 In order to make the game immersive and more appealing, I plan on introducing both, sound and light elements. I am thinking of incorporating a background score that matches the theme of battleship, probably some military-themed music, or something fast-paced during the actual gameplay.
 
@@ -83,7 +83,7 @@ At long last, I present to you ... **Battleship - The Digital Version.**
   Figure 2.1: Battleship - Digital Version Splash Screen
 </p>
 
-▶️▶️ **BATTLESHIP: PLAYER SETUP SCREENS**
+### ▶️▶️ **BATTLESHIP: PLAYER SETUP SCREENS**
 
 The game starts off with the setup screens, wherein the players set their battleships' positions on the grid. In order to keep the duration of the game short, I chose to proceed with 7 x 7 matrices for both the players, instead of the initially proposed 9 x 9 matrices.
 
@@ -159,12 +159,12 @@ p1_battleships_array[p1_shipNumber].shipGrids.splice(0, p1_battleships_array[p1_
 
 Once both players have set their ships, the game begins.
 
-▶️▶️ **BATTLESHIP: GAMEPLAY INTERFACE**
+### ▶️▶️ **BATTLESHIP: GAMEPLAY INTERFACE**
 
 The main gameplay interface consists of both players' matrices present in a split-screen view. A black overlay disables half of the interface depending on which player's turn it is. Both players take turns to select squares, and ultimately, destroy all the ships of the other player.
 
 <p align = "center">
-  <img src = "./Images/Gameplay_Main_.png">
+  <img src = "./Images/Gameplay_Main.png">
   <br>
   Figure 2.8: Battleship - Gameplay Interface
 </p>
@@ -198,7 +198,7 @@ The game continues until a player destroys *all* the ships of the other player. 
   Figure 2.12: Winner Announcement & Grid Display
 </p>
 
-▶️▶️ **BATTLESHIP: SONIC ELEMENTS**
+### ▶️▶️ **BATTLESHIP: SONIC ELEMENTS**
 
 In order to make the game feel more immersive and interesting, I've included background scores throughout the entirety of the game. An ominous pulsating piece of music plays repeatedly during the player setup screens, signalling "peace before the storm" and foreboding the onset of all-out warfare.
 
@@ -206,4 +206,4 @@ The music switches gears and becomes fast-paced & exhilerating during actual gam
 
 In addition to the background scores, I've coded in scenario-specific sound effects as well. During gameplay, if on mouse-click, the player hits a part of a ship, an explosion sound is played signifying the action. If the player misses, a water splash sound is cued for effect.
 
-▶️▶️ **BATTLESHIP: AMBIENT LIGHTING & PHYSICAL COMPUTING**
+### ▶️▶️ **BATTLESHIP: AMBIENT LIGHTING & PHYSICAL COMPUTING**
