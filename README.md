@@ -179,6 +179,8 @@ A blue highlight appears on the square that is being hovered-on by the mouse. On
 
 If a player destroys a ship completely, a notification pops up at the bottom informing about the type of ship destroyed, and its size. The notifications are color-coded to mitigate any confusion, where green-colored notification appears when Player 2 destroys Player 1's ship; and a red-colored notification appears when Player 1 destroys Player 2's ship.
 
+Beneath the players' grids, I've provided an "enemy ship counter" which keeps the players informed about how many ships, of the other player, remain.
+
 <p align = "center">
   <img src = "./Images/Gameplay_ShipDestroyed_P1.png">
   <br>
@@ -208,7 +210,9 @@ In addition to the background scores, I've coded in scenario-specific sound effe
 
 ### ▶️▶️ **BATTLESHIP: AMBIENT LIGHTING & PHYSICAL COMPUTING**
 
-In addition to all the gameplay elements and the sound effects, I've also incorporated a physical computing aspect to my game via Arduino. This enables real-time ambient or environment lighting that makes the whole gameplay experience feel more immersive. I've coded in "triggers" that send in signals to Arduino, which controls the lighting by modifying the LED states.
+In addition to all the gameplay elements and the sound effects, I've also incorporated a physical computing aspect to my game via Arduino. This enables real-time ambient or environment lighting that makes the whole gameplay experience feel more immersive.
+
+I'm using the *p5.WebSerial* library for communicating between p5.js and Arduino in real-time. I've coded in "triggers" that send signals to Arduino, which controls the lighting by modifying the LED states. Each state has a unique alphabet ID, which is passed by p5.js to Arduino. Based on the value, the LEDs turn on/off accordingly.
 
 I've made use of white, blue, red, and orange LEDs to mimic certain situations in-game. Blue & white LEDs light up to simulate water reflections, and red & orange LEDs light up to mimic ship explosions.
 
