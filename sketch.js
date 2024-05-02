@@ -1116,7 +1116,7 @@ function draw()
 
     if(activeSide == 'R')
     {
-      fill(0,225);
+      fill(0,200);
       rect(0, 0, width/2, height);
 
       fill(255);
@@ -1124,7 +1124,7 @@ function draw()
     }
     else if(activeSide == 'L')
     {
-      fill(0,225);
+      fill(0,200);
       rect(width/2, 0, width/2, height);
 
       fill(255);
@@ -1166,20 +1166,20 @@ function draw()
 
       textAlign(CENTER,CENTER);
       textFont(gameFont_bold);
-      textSize(75);
+      textSize(60);
       fill(255);
-      text("GAME OVER", width/2.05, height/2.35);
+      text("CONGRATULATIONS", width/2.05, height/2.35);
       textFont(gameFont_light);
-      textSize(30);
+      textSize(35);
 
       if(shipDestroyed == 1)
       {
-        text("Congratulations, Player 2 !", width/2.05, height/1.95);
+        text("PLAYER 2", width/2.05, height/2);
         arduinoLetterValue = 'X';
       }
       else if(shipDestroyed == 2)
       {
-        text("Congratulations, Player 1 !", width/2.05, height/1.95);
+        text("PLAYER 1", width/2.05, height/2);
         arduinoLetterValue = 'Y';
       }
     }
