@@ -8,7 +8,7 @@
 
 *Battleship* is a turn-based strategy-type guessing game for two players. It is played on ruled grids on which each player's fleet of warships are marked. The locations of the fleets are concealed from the other player. Players alternate between calling "shots" at the other player's ships, and the objective of the game is to destroy the opposing player's fleet.
 
-I've developed a web-based version of this game using web technologies like JavaScript & p5.js, and I've included several diverse elements like a background score, situation-specific sound effects, and ambient / environment lighting (via Arduino).
+I've developed a web-based version of this game using technologies like JavaScript & p5.js, and I've included several diverse elements like background score, situation-specific sound effects, and ambient / environment lighting (via Arduino).
 
 ## PART 1: THE IDEATION PROCESS
 
@@ -40,7 +40,7 @@ I’m thinking of coding a 9 x 9 matrix instead of having a full-size board beca
   Figure 1.3: Matrix Dimension & Element IDs
 </p>
 
-Once the players have set their ships, the game would begin. Both players would take turns in guessing the squares where the enemy's ships are placed, and destroying them. I imagine the gameplay interface having two matrices side-by-side, in a split-screen fashion. The left-half of the screen would be Player 1’s console, and it would display a matrix for marking Player 2’s ships, and “health” details regarding their own ships. The right-half of the screen would display the same interface, but from Player 2’s perspective.
+Once the players have set their ships, the game would begin. Both players would take turns in guessing the squares where the enemy's ships are placed, and destroying them. I imagine the gameplay interface having two matrices side-by-side, in split-screen fashion. The left-half of the screen would be Player 1’s console, and it would display a matrix for marking Player 2’s ships, and “health” details regarding their own ships. The right-half of the screen would display the same interface, but from Player 2’s perspective.
 
 <p align = "center">
   <img src = "./Images/GameplayInterface.jpg">
@@ -54,9 +54,9 @@ Whichever player destroys all the ships of the other player first, wins the game
 
 In order to make the game immersive and more appealing, I plan on introducing both, sound and light elements. I am thinking of incorporating a background score that matches the theme of battleship, probably some military-themed music, or something fast-paced during the actual gameplay.
 
-Additionally, I plan on having specific sound effects for the game. For example, in case a player guesses a correct square and hits the other player’s ship, a “blast” sound would be played, or if the player misses, a "water splash" sound effect could be cued.
+Additionally, I plan on having event-specific sound effects for the game. For example, in case a player guesses a correct square and hits the other player’s ship, a “blast” sound would be played, or if the player misses, a "water splash" sound effect could be cued.
 
-Furthermore, I plan of having some ambient or environment lighting for the game via LEDs, controlled by Arduino. I imagine blue & white light during normal gameplay (mimicking water reflections), or orange & red LEDs lighting up during ship hits to mimic blasts.
+Furthermore, I plan on having some ambient or environment lighting for the game via LEDs, controlled by Arduino. I imagine blue & white light during normal gameplay (mimicking water reflections), or orange & red LEDs lighting up during ship hits to mimic blasts.
 
 <p align = "center">
   <img src = "./Images/BlueWhiteLEDs.jpg">
@@ -97,7 +97,7 @@ The setup screen displays the grid where the players would place their ships, th
 
 On hovering over the grid with the mouse, the squares start lighting up based on what size of the ship the player's placing. The hover-state informs the player of the "placing" status i.e. whether they can place the ship in those squares or not. Squares being green on-hover mean that it's a valid placement. If it's an invalid placement, the squares would turn red.
 
-I've coded in functionalities that check for the matrix's edges; or if the player's placing a second ship on top of another placed ship; or if the entire ship in its current orientation (horizontally or vertically) can fully fit within the matrix grid. If any of these conditions are determined by the code, the squares on-hover would turn red in real-time, indicating the placement status to the player.
+I've coded in functionalities that check for the matrix's edges; or if the player's placing a second ship on top of another placed ship; or if the entire ship in its current orientation (horizontally or vertically) can fully fit within the matrix grid. If any of these conditions are detected by the code, the squares on-hover would turn red in real-time, indicating the placement status to the player.
 
 <p align = "center">
   <img src = "./Images/SetupScreen_EdgeDetect.png">
@@ -133,13 +133,13 @@ if(key == 'r' && keyIsPressed == true)
   Figure 2.5: Ship Rotation Functionality
 </p>
 
-The players "place" their ships by clicking the left-mouse button. Coding the placing part was quite complicated, because that involved passing the selected squares' coordinates from the Battlegrid class to the Battleship class. The Battleship class contains details regarding the player's ship positions, their respective size, and the type.
+The players "place" their ships by clicking the left-mouse button. Coding the placing part was quite complicated, because that involved passing the selected squares' coordinates from the *Battlegrid* class to the *Battleship* class. The *Battleship* class contains details regarding the player's ship positions, their respective size, and the type.
 
 Every square has a unique ID which is a combination of its row and column number. This unique ID is the coordinate for that specific square. I was initially using math to ascertain coordinates and storing them in a single variable called *grid_id*, by using the formula ***(10 x i) + j***, where *i* was the square's row-number, and *j* was the column-number. This quickly became quite problematic when I needed to manipulate certain aspects during gameplay that revolved around a square's coordinate. As a solution, I replaced the single *grid_id* variable with two dedicated variables that stored the square's row & column numbers, *grid_id_row* and *grid_id_col*. These were simple to manipulate, and straightforward to pass off to functions, arrays, or classes during gameplay code execution.
 
-Once this was sorted, I had to figure out now how to pass the **correct** coordinate sequence to the Battleships class on mouse-press. This turned out to be challenging as well. I was making use of certain flags like *grid_hoverFlag* and *grid_occupiedFlag* to filter the squares to be passed, but my code was either passing off wrong coordinates, or more number of squares than the ship size. I ultimately solved it using array modification functions.
+Once this was sorted, I now had to figure out how to pass the ***correct*** coordinate sequence to the *Battleships* class on mouse-press. This turned out to be challenging as well. I was making use of certain flags like *grid_hoverFlag* and *grid_occupiedFlag* to filter the squares to be passed, but my code was either passing off wrong coordinates, or more number of squares than the ship size. I ultimately solved it using array modification functions.
 
-The variable *grid_hoverFlag* for a square fluctuates between 0 and 1 depending on whether it's being hovered on by the mouse. Based on the variable values, I started passing all square coordinates that had *grid_hoverFlag* value as 1, and on mouse-press, I just trim the array to the particular ship size to retain the correct values of the ship coordinates.
+The variable *grid_hoverFlag* for a square fluctuates between 0 and 1 depending on whether it's being hovered on by the mouse. Based on the variable values, I started passing all square coordinates that had *grid_hoverFlag* value as 1, and on mouse-press, I just trim the array to the particular ship size using the *splice()* function to retain the correct values of the ship coordinates.
 
 ```
 //remove all the grid IDs from Battleship, except the latest ones for the given ship_blockSize
@@ -149,7 +149,7 @@ p1_battleships_array[p1_shipNumber].shipGrids.splice(0, p1_battleships_array[p1_
 <p align = "center">
   <img src = "./Images/SetupScreen_Placed.png">
   <br>
-  Figure 2.6: All Ships Placed Successfully
+  Figure 2.6: All Ships - Successful Placement
   <br>
   <br>
   <img src = "./Images/SetupScreen_Player2.png">
@@ -161,7 +161,7 @@ Once both players have set their ships, the game begins.
 
 ### ▶️▶️ **BATTLESHIP: GAMEPLAY INTERFACE**
 
-The main gameplay interface consists of both players' matrices present in a split-screen view. A black overlay disables half of the interface depending on which player's turn it is. Both players take turns to select squares, and ultimately, destroy all the ships of the other player.
+The main gameplay interface consists of both players' matrices present in split-screen view. A black overlay disables half of the interface depending on which player's turn it is. Both players take turns to select squares, and ultimately, destroy all the ships of the other player.
 
 <p align = "center">
   <img src = "./Images/Gameplay_Main.png">
@@ -169,7 +169,7 @@ The main gameplay interface consists of both players' matrices present in a spli
   Figure 2.8: Battleship - Gameplay Interface
 </p>
 
-A blue highlight appears on the square that is being hovered on by the mouse. On mouse-press, the square's color would change either to green or red, depending on whether a ship's part is present there or not.
+A blue highlight appears on the square that is being hovered-on by the mouse. On mouse-press, the square's color would change either to green or red, depending on whether a ship's part is present there or not.
 
 <p align = "center">
   <img src = "./Images/Gameplay_SquareClicked.png">
@@ -200,19 +200,19 @@ The game continues until a player destroys *all* the ships of the other player. 
 
 ### ▶️▶️ **BATTLESHIP: SONIC ELEMENTS**
 
-In order to make the game more interesting, I've included background scores throughout the entirety of the game. An ominous pulsating piece of music plays repeatedly during the player setup screens, signalling "peace before the storm" and foreboding the onset of all-out warfare.
+In order to make the game more interesting, I've included background scores throughout the entirety of the game. An ominous pulsating piece of music plays repeatedly during the player setup screens, signalling "peace before the storm" and foreboding all-out warfare.
 
 The music switches gears and becomes fast-paced & exhilerating during actual gameplay to infuse that competitive spirit among the players. It only comes to a stop when the game finishes, and the winner is announced.
 
-In addition to the background scores, I've coded in scenario-specific sound effects as well. During gameplay, if on mouse-click, the player hits a part of a ship, an explosion sound is played signifying the action. If the player misses, a water splash sound is cued for effect.
+In addition to the background scores, I've coded in scenario-specific sound effects as well. During gameplay, if on mouse-click, the player hits a part of a ship, an explosion sound is played, signifying the action. If the player misses, a water splash sound is cued for effect.
 
 ### ▶️▶️ **BATTLESHIP: AMBIENT LIGHTING & PHYSICAL COMPUTING**
 
-In addition to all the gameplay elements and the sound effects, I've also incorporated a physical computing aspect to my game via Arduino. This enables real-time ambient or environment lighting that makes the whole gameplay experience feel more immersive. I've coded in "triggers" that send in signals to Arduino, which controls the lighting to modifying the LED states.
+In addition to all the gameplay elements and the sound effects, I've also incorporated a physical computing aspect to my game via Arduino. This enables real-time ambient or environment lighting that makes the whole gameplay experience feel more immersive. I've coded in "triggers" that send in signals to Arduino, which controls the lighting by modifying the LED states.
 
-I've made use of white, blue, red, and orange LEDs to mimic certain situations in-game. Blue & white LEDs light up to simulate water reflections, or red & orange LEDs light up to mimic ship explosions.
+I've made use of white, blue, red, and orange LEDs to mimic certain situations in-game. Blue & white LEDs light up to simulate water reflections, and red & orange LEDs light up to mimic ship explosions.
 
-I'm using a total of 32 LEDs i.e. 16 for each player. During the player setup screens, LEDs alternate between blue & white colors. I'm utilizing two breadboards connected to a single Arduino ESP32 controller. The left breadboard lighting corresponds to Player 1, whereas the lighting on the right breadboard is for Player 2.
+I'm using a total of 32 LEDs i.e. 16 for each player. During the player setup screens, LEDs alternate between blue & white colors. I'm utilizing two breadboards connected to a single Arduino Nano ESP32 controller. The lighting on the left breadboard corresponds to Player 1, whereas the lighting on the right breadboard is for Player 2.
 
 <p align = "center">
   <img src = "./Images/Ambient_Setup_P1.jpg">
@@ -225,7 +225,7 @@ I'm using a total of 32 LEDs i.e. 16 for each player. During the player setup sc
   Figure 2.14: Ambient Lighting - Player 2 Setup Screen
 </p>
 
-The LED action during the actual gameplay is different. Here, whenever a player clicks on a square, if that square had a ship-part or not, influences the LED colors. If the square turns red, the LEDs also glow red & orange mimicking an explosion. If the square turns green, the LEDs glow white & blue, mimicking water splashes and reflections. If a player destroys a ship completely, the red & orange LEDs start blinking, providing a visual confirmation of the feat, in addition to the on-screen notification.
+LED action during actual gameplay is different. Whenever a player clicks on a square, if that square had a ship-part or not, influences the LED colors. If the square turns red, the LEDs also glow red & orange mimicking an explosion. If the square turns green, the LEDs glow white & blue, mimicking water splashes and reflections. If a player destroys a ship completely, the red & orange LEDs start blinking, providing a visual confirmation of the feat, in addition to the on-screen notification.
 
 <p align = "center">
   <img src = "./Images/Ambient_Gameplay_SquareMissed.jpg">
