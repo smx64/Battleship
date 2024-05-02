@@ -92,7 +92,7 @@ The setup screen displays the grid where the players would place their ships, th
 <p align = "center">
   <img src = "./Images/SetupScreen_Main.png">
   <br>
-  Figure 2.2: Player Setup Screen
+  Figure 2.2: Player Setup Screen - Player 1
 </p>
 
 On hovering over the grid with the mouse, the squares start lighting up based on what size of the ship the player's placing. The hover-state informs the player of the "placing" status i.e. whether they can place the ship in those squares or not. Squares being green on-hover mean that it's a valid placement. If it's an invalid placement, the squares would turn red.
@@ -157,4 +157,43 @@ p1_battleships_array[p1_shipNumber].shipGrids.splice(0, p1_battleships_array[p1_
   Figure 2.7: Player Setup Screen - Player 2
 </p>
 
+Once both players have set their ships, the game begins.
+
 ▶️▶️ **BATTLESHIP: GAMEPLAY INTERFACE**
+
+The main gameplay interface consists of both players' matrices present in a split-screen view. A black overlay disables half of the interface depending on which player's turn it is. Both players take turns to select squares, and ultimately, destroy all the ships of the other player.
+
+<p align = "center">
+  <img src = "./Images/GameplayInterface.png">
+  <br>
+  Figure 2.8: Battleship - Gameplay Interface
+</p>
+
+A blue highlight appears on the square that is being hovered on by the mouse. On mouse-press, the square's color would change either to green or red, depending on whether a ship's part is present there or not.
+
+<p align = "center">
+  <img src = "./Images/Gameplay_SquareClicked.png">
+  <br>
+  Figure 2.9: Gameplay - Mouse-Click Interaction
+</p>
+
+If a player destroys a ship completely, a notification pops up at the bottom informing about the type of ship destroyed, and its size. The notifications are color-coded to mitigate any confusion, where green-colored notification appears when Player 2 destroys Player 1's ship; and a red-colored notification appears when Player 1 destroys Player 2's ship.
+
+<p align = "center">
+  <img src = "./Images/Gameplay_ShipDestroyed_P1.png">
+  <br>
+  Figure 2.10: Ship Destroyed Notification for Player 1
+  <br>
+  <br>
+  <img src = "./Images/Gameplay_ShipDestroyed_P2.png">
+  <br>
+  Figure 2.11: Ship Destroyed Notification for Player 2
+</p>
+
+The game continues until a player destroys *all* the ships of the other player. Once the code detects that all ships for a particular player have been destroyed, the game ends. The black overlay goes away, revealing both the players' matrices in the background, and a congratulatory message is presented, along with the winning player's number on-screen.
+
+<p align = "center">
+  <img src = "./Images/Gameplay_Finished.png">
+  <br>
+  Figure 2.12: Winner Announcement & Grid Display
+</p>
