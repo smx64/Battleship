@@ -70,3 +70,91 @@ Furthermore, I plan of having some ambient or environment lighting for the game 
 </p>
 
 ## PART 2: THE REALIZATION PROCESS
+
+Before I begin explaining about the gameplay and the development process, I want to briefly touch upon the challenges I faced while coding this. TBH, this was quite an ambitious endeavor, and I wasn't fully sure whether I'd be able to code all the functionalities that I had thought of, or proposed during the ideation process.
+
+This game (along with all its aspects) is a culmination of a month-long effort involving coding, debugging, retrying, experimenting, and learning new things, with bouts of frustration & stress sprinkled in-between, and the remaining time being devoted to my unrelenting determination to get all my elements (and the code) working. Building this from the ground up was nothing short of a rollercoaster ride, but extremely fun and exciting nevertheless.
+
+At long last, I present to you ... **Battleship - The Digital Version.**
+
+<p align = "center">
+  <img src = "./Images/SplashScreen.png">
+  <br>
+  Figure 2.1: Battleship - Digital Version Splash Screen
+</p>
+
+▶️▶️ **BATTLESHIP: PLAYER SETUP SCREENS**
+
+The game starts off with the setup screens, wherein the players set their battleships' positions on the grid. In order to keep the duration of the game short, I chose to proceed with 7 x 7 matrices for both the players, instead of the initially proposed 9 x 9 matrices.
+
+The setup screen displays the grid where the players would place their ships, the quantity of battleships they have and their respective sizes (in blocks), and the type of ship they're currently placing along with a graphic of the same. I had to scour the depths of *Adobe Stock* in order to gather the ship images that matched my aesthetic. I reduced their sizes post downloading in order to optimize the game's performance, and the browser's resource utilization.
+
+<p align = "center">
+  <img src = "./Images/SetupScreen_Main.png">
+  <br>
+  Figure 2.2: Player Setup Screen
+</p>
+
+On hovering over the grid with the mouse, the squares start lighting up based on what size of the ship the player's placing. The hover-state informs the player of the "placing" status i.e. whether they can place the ship in those squares or not. Squares being green on-hover mean that it's a valid placement. If it's an invalid placement, the squares would turn red.
+
+I've coded in functionalities that check for the matrix's edges; or if the player's placing a second ship on top of another placed ship; or if the entire ship in its current orientation (horizontally or vertically) can fully fit within the matrix grid. If any of these conditions are determined by the code, the squares on-hover would turn red in real-time, indicating the placement status to the player.
+
+<p align = "center">
+  <img src = "./Images/SetupScreen_EdgeDetect.png">
+  <br>
+  Figure 2.3: Grid Edge Detection & Dynamic Color-Change
+  <br>
+  <br>
+  <img src = "./Images/SetupScreen_ShipOverlap.png">
+  <br>
+  Figure 2.4: Ship Overlap Detection & Dynamic Color-Change
+</p>
+
+Additionally, players can rotate their ships in 360° fashion by pressing the [ R ] key on the keyboard. The code seamlessly checks for all the above conditions dynamically for any orientation the player chooses.
+
+```
+//rotate the ship on key-press
+if(key == 'r' && keyIsPressed == true)
+{
+  rotateFlag+=90;
+  keyIsPressed = false;
+
+  //ship orientation completes full circle
+  if(rotateFlag == 360)
+  {
+    rotateFlag = 0;
+  }
+}
+```
+
+<p align = "center">
+  <img src = "./Images/SetupScreen_Rotation.png">
+  <br>
+  Figure 2.5: Ship Rotation Functionality
+</p>
+
+The players "place" their ships by clicking the left-mouse button. Coding the placing part was quite complicated, because that involved passing the selected squares' coordinates from the Battlegrid class to the Battleship class. The Battleship class contains details regarding the player's ship positions, their respective size, and the type.
+
+Every square has a unique ID which is a combination of its row and column number. This unique ID is the coordinate for that specific square. I was initially using math to ascertain coordinates and storing them in a single variable called *grid_id*, by using the formula ***(10 x i) + j***, where *i* was the square's row-number, and *j* was the column-number. This quickly became quite problematic when I needed to manipulate certain aspects during gameplay that revolved around a square's coordinate. As a solution, I replaced the single *grid_id* variable with two dedicated variables that stored the square's row & column numbers, *grid_id_row* and *grid_id_col*. These were simple to manipulate, and straightforward to pass off to functions, arrays, or classes during gameplay code execution.
+
+Once this was sorted, I had to figure out now how to pass the **correct** coordinate sequence to the Battleships class on mouse-press. This turned out to be challenging as well. I was making use of certain flags like *grid_hoverFlag* and *grid_occupiedFlag* to filter the squares to be passed, but my code was either passing off wrong coordinates, or more number of squares than the ship size. I ultimately solved it using array modification functions.
+
+The variable *grid_hoverFlag* for a square fluctuates between 0 and 1 depending on whether it's being hovered on by the mouse. Based on the variable values, I started passing all square coordinates that had *grid_hoverFlag* value as 1, and on mouse-press, I just trim the array to the particular ship size to retain the correct values of the ship coordinates.
+
+```
+//remove all the grid IDs from Battleship, except the latest ones for the given ship_blockSize
+p1_battleships_array[p1_shipNumber].shipGrids.splice(0, p1_battleships_array[p1_shipNumber].shipGrids.length-(ship_blockSize*2));
+```
+
+<p align = "center">
+  <img src = "./Images/SetupScreen_Placed.png">
+  <br>
+  Figure 2.6: All Ships Placed Successfully
+  <br>
+  <br>
+  <img src = "./Images/SetupScreen_Player2.png">
+  <br>
+  Figure 2.7: Player Setup Screen - Player 2
+</p>
+
+▶️▶️ **BATTLESHIP: GAMEPLAY INTERFACE**
