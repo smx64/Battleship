@@ -60,23 +60,23 @@ Additionally, I plan on having event-specific sound effects for the game. For ex
 
 ## PART 2: THE REALIZATION PROCESS
 
-Before I begin explaining about the gameplay and the development process, I want to briefly touch upon the challenges I faced while coding this. TBH, this was quite an ambitious endeavor, and I wasn't fully sure whether I'd be able to code all the functionalities that I had thought of, or proposed during the ideation process.
+Before I begin explaining about the gameplay and the development process, I want to briefly touch upon the challenges I faced while coding this. TBH, this was quite an ambitious endeavor, and I wasn't fully sure whether I'd be able to code all the functionalities that I had thought of during the ideation process.
 
-This game (along with all its aspects) is a culmination of a month-long effort involving coding, debugging, retrying, experimenting, and learning new things, with bouts of frustration & stress sprinkled in-between, and the remaining time being devoted to my unrelenting determination to get all my elements (and the code) working. Building this from the ground up was nothing short of a rollercoaster ride, but extremely fun and exciting nevertheless.
+This game, along with all its aspects, is a culmination of a (almost) month-long effort involving coding, debugging, retrying, experimenting, and learning new things, with bouts of frustration & stress sprinkled in-between, and the remaining time being devoted to my unrelenting determination to get all my elements (and the code) working. Building this from the ground up was nothing short of a rollercoaster ride, but extremely fun and exciting nevertheless.
 
-At long last, I present to you ... **Battleship - The Digital Version.**
+At long last, I present to you ... **Battleship - The Digital Experience.**
 
 <p align = "center">
   <img src = "./Images/SplashScreen.png">
   <br>
-  Figure 2.1: Battleship - Digital Version Splash Screen
+  Figure 2.1: Battleship - Digital Experience Splash Screen
 </p>
 
-### ▶️▶️ **BATTLESHIP: PLAYER SETUP SCREENS**
+### ▶️ **BATTLESHIP: PLAYER SETUP SCREENS**
 
 The game starts off with the setup screens, wherein the players set their battleships' positions on the grid. In order to keep the duration of the game short, I chose to proceed with 7 x 7 matrices for both the players, instead of the initially proposed 9 x 9 matrices.
 
-The setup screen displays the grid where the players would place their ships, the quantity of battleships they have and their respective sizes (in blocks), and the type of ship they're currently placing along with a graphic of the same. I had to scour the depths of *Adobe Stock* in order to gather the ship images that matched my aesthetic. I reduced their sizes post downloading in order to optimize the game's performance, and the browser's resource utilization.
+The setup screen displays the grid where the players would place their ships, the quantity of battleships they have and their respective sizes (in blocks), and the type of ship they're currently placing along with a reference image of the same. I utilized _Adobe Firefly_ for generating the ship images. I later touched up and color-graded them using _Adobe Photoshop_ to match my aesthetic. I also reduced their sizes slightly in order to optimize the game's performance, and the browser's resource utilization.
 
 <p align = "center">
   <img src = "./Images/SetupScreen_Main.png">
@@ -148,7 +148,7 @@ p1_battleships_array[p1_shipNumber].shipGrids.splice(0, p1_battleships_array[p1_
 
 Once both players have set their ships, the game begins.
 
-### ▶️▶️ **BATTLESHIP: GAMEPLAY INTERFACE**
+### ▶️ **BATTLESHIP: GAMEPLAY INTERFACE**
 
 The main gameplay interface consists of both players' matrices present in split-screen view. A black overlay disables half of the interface depending on which player's turn it is. Both players take turns to select squares, and ultimately, destroy all the ships of the other player.
 
@@ -189,7 +189,7 @@ The game continues until a player destroys *all* the ships of the other player. 
   Figure 2.12: Winner Announcement & Grid Display
 </p>
 
-### ▶️▶️ **BATTLESHIP: SONIC ELEMENTS**
+### ▶️ **BATTLESHIP: SONIC ELEMENTS**
 
 In order to make the game more interesting, I've included background scores throughout the entirety of the game. An ominous pulsating piece of music plays repeatedly during the player setup screens, signalling "peace before the storm" and foreboding all-out warfare.
 
