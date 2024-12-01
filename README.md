@@ -1,22 +1,22 @@
 # Battleship - The Digital Experience
-**Languages Used:** JavaScript, p5.js, CSS, HTML
-**AI Tools Used:** Midjourney, Luma AI, Kling AI, ChatGPT, Udio
-**Software Used:** VS Code, GitHub, Adobe Photoshop, Adobe After Effects, FL Studio
+_**Languages:**_ JavaScript, p5.js, CSS, HTML  
+_**AI Tools:**_ Midjourney, Adobe Firefly, Kling AI, Luma AI, ChatGPT, Udio  
+_**Software:**_ VS Code, GitHub, Adobe Photoshop, Adobe After Effects, FL Studio
 
 <p align = "center">
   <img src = "./Images/BattleshipBoardGame.JPG">
   Figure 0.1: The Original Battleship Board Game
 </p>
 
-*Battleship* is a turn-based strategy-type guessing game for two players. It is played on ruled grids on which each player's fleet of warships are marked. The locations of the fleets are concealed from the other player. Players alternate between calling "shots" at the other player's ships, and the objective of the game is to destroy the opposing player's fleet.
+_Battleship_ is a classic, two-player strategy game where players guess the locations of each other’s fleets on ruled grids. Each player marks their fleet on a concealed grid, taking turns to “fire shots” at the opposing player’s grid in an attempt to destroy their ships. The first one to destroy all ships of the other player wins the game.
 
-I've developed a web-based version of this game using technologies like JavaScript & p5.js, and I've included several diverse elements like a background score and situation-specific sound effects.
+Based on this, I've developed a 2D web-based videogame. It allows players to engage in split-screen gameplay, offering a side-by-side battle experience that captures the competitive spirit of the original. For added immersion, the game features a background score, and sound effects that respond to in-game events. Additionally, I've created a cinematic opening sequence familiarizing players with the game’s atmosphere, and ultimately blending into the actual gameplay to create a seamless connection.
 
 ## PART 1: THE IDEATION PROCESS
 
-### ▶️▶️ **GAME INTERFACE & CODE**
+### ▶️ **GAME INTERFACE & CODE**
 
-The game would start off with the first player plotting the positions of their battleships in a 9 x 9 square matrix. Once they’re done, the second player repeats the same process.
+The game starts off with the first player plotting the positions of their battleships in a 9 x 9 square matrix. Once they’re done, the second player repeats the same process.
 
 <p align = "center">
   <img src = "./Images/PlayerSetupMatrix.jpg">
@@ -24,9 +24,9 @@ The game would start off with the first player plotting the positions of their b
   Figure 1.1: Player Setup Matrix
 </p>
 
-As there would be just 81 squares (9 x 9 matrix), as opposed to the original game’s 10 x 10 or 12 x 12 dimensions, I’d probably limit the total number of battleships available with each player. The players generally have 5 ships of varying sizes, but given the smaller size of the battlefield, I’d scale that quantity down accordingly.
+As there would be just 81 squares (9 x 9 matrix), as opposed to the original’s 12 x 12 dimensions, I’m limiting the quantity of battleships available with each player. The players generally have 5 ships of varying sizes, but given the smaller size of the battlefield, that quantity has been scaled down accordingly.
 
-The ship sizes are calculated in blocks, so players can have ship sizes ranging between 2-5 blocks, either horizontally or vertically.
+The ship sizes are calculated in blocks. Hence, players have ship sizes ranging between 2-5 blocks, either horizontally or vertically.
 
 <p align = "center">
   <img src = "./Images/ShipSizesPlacement.jpg">
@@ -34,7 +34,7 @@ The ship sizes are calculated in blocks, so players can have ship sizes ranging 
   Figure 1.2: Ship Sizes & Orientation
 </p>
 
-I’m thinking of coding a 9 x 9 matrix instead of having a full-size board because, I feel, anything beyond 9 would involve more specific code for indices “10” and above, in addition to the code that’d be there for rest of the matrix. For example, in a 10 x 10 matrix, if the block IDs range from 1.1, 1.2, 1.3 … 1.10, I’d need to factor in additional logic & code for calculating individual row & column indices for 1.10, 2.10, 10.10 etc. Hence, in the interest of time, I’m limiting it to 9 x 9 matrix.
+I’ve coded a 9 x 9 matrix instead of a full-sized board because anything beyond 9 would involve specific code for indices “10” and above, in addition to the code that’s there for rest of the matrix. For example, in a 10 x 10 matrix, if the block IDs range from 1.1, 1.2, 1.3 … 1.10, additional logic & code needs to be factored in for calculating individual row & column indices for 1.10, 2.10, 10.10 etc. Hence, in the interest of time and to keep the gameplay fast-paced, I’ve limited it to a 9 x 9 matrix.
 
 <p align = "center">
   <img src = "./Images/ElementIDs.jpg">
@@ -42,7 +42,7 @@ I’m thinking of coding a 9 x 9 matrix instead of having a full-size board beca
   Figure 1.3: Matrix Dimension & Element IDs
 </p>
 
-Once the players have set their ships, the game would begin. Both players would take turns in guessing the squares where the enemy's ships are placed, and destroying them. I imagine the gameplay interface having two matrices side-by-side, in split-screen fashion. The left-half of the screen would be Player 1’s console, and it would display a matrix for marking Player 2’s ships, and “health” details regarding their own ships. The right-half of the screen would display the same interface, but from Player 2’s perspective.
+Once the players have set their ships, the game begins. Both players take turns in guessing the squares where the enemy's ships are placed, and destroying them. The gameplay interface has two matrices side-by-side in split-screen fashion. The left-half of the screen is Player 1’s console, and it displays a matrix for marking Player 2’s ships. The right-half of the screen displays the same, but from Player 2’s perspective.
 
 <p align = "center">
   <img src = "./Images/GameplayInterface.jpg">
@@ -52,9 +52,9 @@ Once the players have set their ships, the game would begin. Both players would 
 
 Whichever player destroys all the ships of the other player first, wins the game.
 
-### ▶️▶️ **VISUAL & SONIC IMMERSION**
+### ▶️ **SONIC IMMERSION**
 
-In order to make the game immersive and more appealing, I plan on incorporating a background score that matches the theme of battleship, probably some military-themed music, or something fast-paced during the actual gameplay.
+In order to make the game immersive and more appealing, I plan on incorporating a background score that matches the theme of battleship: probably some military-themed music, or something fast-paced during the actual gameplay.
 
 Additionally, I plan on having event-specific sound effects for the game. For example, in case a player guesses a correct square and hits the other player’s ship, a “blast” sound would be played, or if the player misses, a "water splash" sound effect could be cued.
 
