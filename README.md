@@ -34,7 +34,7 @@ The ship sizes are calculated in blocks. Hence, players have ship sizes ranging 
   Figure 1.2: Ship Sizes & Orientation
 </p>
 
-I’ve coded a 9 x 9 matrix instead of a full-sized board because anything beyond 9 would involve specific code for indices “10” and above, in addition to the code that’s there for rest of the matrix. For example, in a 10 x 10 matrix, if the block IDs range from 1.1, 1.2, 1.3 … 1.10, additional logic & code needs to be factored in for calculating individual row & column indices for 1.10, 2.10, 10.10 etc. Hence, in the interest of time and to keep the gameplay fast-paced, I’ve limited it to a 9 x 9 matrix.
+I’ll be coding a 9 x 9 matrix instead of a full-sized board because anything beyond 9 would involve specific code for indices “10” and above, in addition to the code that’s there for rest of the matrix. For example, in a 10 x 10 matrix, if the block IDs range from 1.1, 1.2, 1.3 … 1.10, additional logic & code needs to be factored in for calculating individual row & column indices for 1.10, 2.10, 10.10 etc. Hence, in the interest of time and to keep the gameplay fast-paced, I’ll limit it to a 9 x 9 matrix.
 
 <p align = "center">
   <img src = "./Images/ElementIDs.jpg">
@@ -54,9 +54,9 @@ Whichever player destroys all the ships of the other player first, wins the game
 
 ### ▶️ **SONIC IMMERSION**
 
-In order to make the game immersive and more appealing, I plan on incorporating a background score that matches the theme of battleship: probably some military-themed music, or something fast-paced during the actual gameplay.
+In order to make the game immersive and more appealing, I plan on incorporating a background score that matches the theme of _Battleship_: probably some military-themed music, or something fast-paced during the actual gameplay.
 
-Additionally, I plan on having event-specific sound effects for the game. For example, in case a player guesses a correct square and hits the other player’s ship, a “blast” sound would be played, or if the player misses, a "water splash" sound effect could be cued.
+Additionally, I plan on having event-specific sound effects for the game. For example, in case a player guesses a correct square and hits the other player’s ship, a “blast” sound would be played, or if the player misses, a "water splash" sound effect would be cued.
 
 ## PART 2: THE REALIZATION PROCESS
 
@@ -203,14 +203,20 @@ Before diving into the process, I'd just like to mention that I had seriously _*
 
 The opening cinematic sequence, thus, is a collaboration between various AI tools and me. I started the movie-making process by jotting down some points about how I wanted my video to progress. I was envisioning a brief setup followed by an all-out war. I worked on _Midjourney_ for conceptualizing the stills for the video. These stills were later used as reference by image-to-video AI tools for generating full scenes.
 
+<p align = "center">
+  <img src = "./Images/KlingAI.png">
+  <br>
+  Figure 2.13: Kling AI - The Very First (Unsuccessful) Trial
+</p>
+
 I had divided my "screenplay" into 15 individual shots. I came across _Kling AI_ while searching for some decent AI video generators, and I think it did a decent job in reproducing the stills' aesthetic, and followed the direction prompts successfully most of the times. I've used _Luma AI_ for generating scenes which required less elements and "action". In order to prompt these tools correctly, and to know which keywords to use to maximize their output quality, I used _ChatGPT_ for enhancing some of my prompts. Those were then fed to _Kling AI_ for getting the desired results, and I must note that this step really helped me in achieving the correct aesthetic, as well as, having a consistent look throughout the scenes.
 
-Once I had generated all the scenes, I imported them all into _Adobe After Effects_ for compositing & editing. I edited the video myself: color-grading, creating transitions & light sweeps, and most importantly, adding camera motion to give off that "chaotic action" feel to the whole video.
+Once I had generated all the scenes, I imported them all into _Adobe After Effects_ for compositing & editing. I edited the video myself: color-grading, creating transitions & light sweeps, adding grain & noise, and most importantly, adding camera motion to give off that "chaotic action" feel to the whole video.
 
 <p align = "center">
   <img src = "./Images/AfterEffects.png">
   <br>
-  Figure 2.13: Adobe After Effects - Video Editing
+  Figure 2.14: Adobe After Effects - Video Editing
 </p>
 
 The audio for the cinematic is a combination of sourced-audio and AI-generated elements. For audio generation, I've used _Udio_ - a text-to-audio AI tool. The sound of seagulls, the "marines announcement" at the beginning, the airplane fly-by sound, the blaring air-horn, the turret firing sound - all these were individually generated using _Udio_. For the end explosion, I sourced some stock audio from _YouTube_ as _Udio_ wasn't generating it the way I wanted it to (it didn't have that "oomph factor"). I arranged and mixed all these using _FL Studio_ to come up with the "final audio" that went into the video.
