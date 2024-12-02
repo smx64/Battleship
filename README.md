@@ -196,3 +196,21 @@ In order to make the game more interesting, I've included background scores thro
 The music switches gears and becomes fast-paced & exhilerating during actual gameplay to infuse that competitive spirit among the players. It only comes to a stop when the game finishes, and the winner is announced.
 
 In addition to the background scores, I've coded in scenario-specific sound effects as well. During gameplay, if on mouse-click, the player hits a part of a ship, an explosion sound is played, signifying the action. If the player misses, a water splash sound is cued for effect.
+
+### ▶️ **BATTLESHIP: OPENING CINEMATIC**
+
+Before diving into the process, I'd just like to mention that I had seriously _**overestimated**_ AI's simplicity. It took really long for me to have the AI tools generate some decent videos based on my vision for the sizzle reel. The constant back-and-forth with the prompts, and using multiple text-to-video models to generate footage for my video had me testing my patience!
+
+The opening cinematic sequence, thus, is a collaboration between various AI tools and me. I started the movie-making process by jotting down some points about how I wanted my video to progress. I was envisioning a brief setup followed by an all-out war. I worked on _Midjourney_ for conceptualizing the stills for the video. These stills were later used as reference by image-to-video AI tools for generating full scenes.
+
+I had divided my "screenplay" into 15 individual shots. I came across _Kling AI_ while searching for some decent AI video generators, and I think it did a decent job in reproducing the stills' aesthetic, and followed the direction prompts successfully most of the times. I've used _Luma AI_ for generating scenes which required less elements and "action". In order to prompt these tools correctly, and to know which keywords to use to maximize their output quality, I used _ChatGPT_ for enhancing some of my prompts. Those were then fed to _Kling AI_ for getting the desired results, and I must note that this step really helped me in achieving the correct aesthetic, as well as, having a consistent look throughout the scenes.
+
+Once I had generated all the scenes, I imported them all into _Adobe After Effects_ for compositing & editing. I edited the video myself: color-grading, creating transitions & light sweeps, and most importantly, adding camera motion to give off that "chaotic action" feel to the whole video.
+
+<p align = "center">
+  <img src = "./Images/AfterEffects.png">
+  <br>
+  Figure 2.13: Adobe After Effects - Video Editing
+</p>
+
+The audio for the cinematic is a combination of sourced-audio and AI-generated elements. For audio generation, I've used _Udio_ - a text-to-audio AI tool. The sound of seagulls, the "marines announcement" at the beginning, the airplane fly-by sound, the blaring air-horn, the turret firing sound - all these were individually generated using _Udio_. For the end explosion, I sourced some stock audio from _YouTube_ as _Udio_ wasn't generating it the way I wanted it to (it didn't have that "oomph factor"). I arranged and mixed all these using _FL Studio_ to come up with the "final audio" that went into the video.
