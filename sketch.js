@@ -992,8 +992,8 @@ function draw()
     textAlign(CENTER,CENTER);
     textFont(gameFont_bold);
     textSize(20);
-    text("ENEMY SHIPS LEFT: "+shipRemain_P1, width/4.2, height/1.15);
-    text("ENEMY SHIPS LEFT: "+shipRemain_P2, width/1.35, height/1.15);
+    text("ENEMY SHIPS LEFT: "+shipRemain_P2, width/4.3, height/1.16);
+    text("ENEMY SHIPS LEFT: "+shipRemain_P1, width/1.36, height/1.16);
 
     //black overlay & text depending on which side is active
     noStroke();
@@ -1036,9 +1036,9 @@ function draw()
       textAlign(CENTER,CENTER);
       textSize(20);
       textFont(gameFont_bold);      
-      text("[ A PLAYER "+(shipDestroyed)+" SHIP HAS BEEN DESTROYED ]", width/2.1, height/1.1);
+      text("[ PLAYER "+(shipDestroyed)+" SHIP DESTROYED ]", width/2, height/1.095);
       textFont(gameFont_light);
-      text(p1_battleships_array[shipID_Destroyed].shipType +" - "+p1_battleships_array[shipID_Destroyed].shipLength+" Blocks", width/2.1, height/1.06);
+      text(p1_battleships_array[shipID_Destroyed].shipType +" - "+p1_battleships_array[shipID_Destroyed].shipLength+" Blocks", width/2, height/1.06);
     }
 
     //code snippet to check whether all ships destroyed for a player & announce winner
@@ -1057,18 +1057,18 @@ function draw()
       textFont(gameFont_bold);
       textSize(60);
       fill(255);
-      text("CONGRATULATIONS", width/2.05, height/2.35);
+      text("CONGRATULATIONS", width/2, height/2.3);
       textFont(gameFont_light);
       textSize(35);
 
       if(shipDestroyed == 1)
       {
-        text("PLAYER 2", width/2.05, height/2);
+        text("PLAYER 2", width/2, height/2);
         arduinoLetterValue = 'X';
       }
       else if(shipDestroyed == 2)
       {
-        text("PLAYER 1", width/2.05, height/2);
+        text("PLAYER 1", width/2, height/2);
         arduinoLetterValue = 'Y';
       }
     }
