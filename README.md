@@ -1,4 +1,16 @@
 # Battleship - The Digital Experience
+## ARTIST STATEMENT
+
+_Battleship – The Digital Experience_ is more than a digital reimagining of a beloved board game – it’s a dialogue between human creativity and the transformative potential of AI. This project reflects my vision of collaborative artistry, where technology becomes a tool for expressing my personal narrative rather than overshadowing it. While AI played a role in crafting the opening cinematic, every detail – from the underlying script & concepts to the music progression – was shaped by my perspective, ensuring that the final piece feels authentic to me.
+
+The cinematic opening, thus, sets the tone for an intense gameplay. Despite AI’s contribution, the soul of the experience – the fast-paced, competitive spirit of the original _Battleship_ – is unmistakably mine. I meticulously designed and sourced the music to mirror the energy of the game, amplifying the sense of nostalgia and engagement for players.
+
+At its core, this project is a digital homage to the classic game, a deeply personal exploration that bridges my technical background with my artistic aspirations. The gameplay and coding were entirely my own work, a way to bring my childhood memories of _Battleship_ into a more modern medium while retaining its timeless charm. By blending these elements, I aimed to create something that feels not only innovative but also intimately handcrafted.
+
+Through my work, I invite people to rediscover a classic game, now reimagined with a touch of cinematic flair, a hint of AI collaboration, and a whole lot of personal passion. It’s a tribute to the games that shaped our imaginations and a testament to the endless possibilities when art and technology converge.
+
+## THE PROCESS
+
 _**Languages:**_ JavaScript, p5.js, CSS, HTML  
 _**AI Tools:**_ Midjourney, Adobe Firefly, Kling AI, Luma AI, ChatGPT, Udio  
 _**Software:**_ VS Code, GitHub, Adobe Photoshop, Adobe After Effects, FL Studio
@@ -12,7 +24,7 @@ _Battleship_ is a classic, two-player strategy game where players guess the loca
 
 Based on this, I've developed a 2D web-based videogame. It allows players to engage in split-screen gameplay, offering a side-by-side battle experience that captures the competitive spirit of the original. For added immersion, the game features a background score, and sound effects that respond to in-game events. Additionally, I've created a cinematic opening sequence familiarizing players with the game’s atmosphere, and ultimately blending into the actual gameplay to create a seamless connection.
 
-## PART 1: THE IDEATION PROCESS
+## PART 1: IDEATION
 
 ### ▶️ **GAME INTERFACE & CODE**
 
@@ -58,7 +70,7 @@ In order to make the game immersive and more appealing, I plan on incorporating 
 
 Additionally, I plan on having event-specific sound effects for the game. For example, in case a player guesses a correct square and hits the other player’s ship, a “blast” sound would be played, or if the player misses, a "water splash" sound effect would be cued.
 
-## PART 2: THE REALIZATION PROCESS
+## PART 2: REALIZATION
 
 Before I begin explaining about the gameplay and the development process, I want to briefly touch upon the challenges I faced while coding this. TBH, this was quite an ambitious endeavor, and I wasn't fully sure whether I'd be able to code all the functionalities that I had thought of during the ideation process.
 
